@@ -18,6 +18,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'payer_id',
         as: 'payer'
       });
+      this.hasMany(models.FriendList, {
+        foreignKey: 'friend_one',
+        as: 'friend_one'
+      });
+      this.hasMany(models.FriendList, {
+        foreignKey: 'friend_two',
+        as: 'friend_two'
+      });
     }
   }
   User.init({
