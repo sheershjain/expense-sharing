@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model
+  Model, Sequelize
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class FriendList extends Model {
@@ -10,19 +10,32 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.User, {
+        foreignKey: 'friend_one',
+        targetKey: 'id'
+      });
+      this.belongsTo(models.User, {
+        foreignKey: 'friend_two',
+        targetKey: 'id'
+      });
     }
   }
   FriendList.init({
     friend_one: {
       allowNull: false,
       type: Sequelize.UUID,
-      defaultValue: Sequelize.literal('uuid_generate_v4()')
+      references: {
+        model: 'user',
+        key: 'id',
+      }
     },
     friend_two: {
       allowNull: false,
       type: Sequelize.UUID,
-      defaultValue: Sequelize.literal('uuid_generate_v4()')
+      references: {
+        model: 'user',
+        key: 'id',
+      }
     },
     status: {
       type: Sequelize.ENUM,
