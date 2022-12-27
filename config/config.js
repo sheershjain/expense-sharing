@@ -20,10 +20,10 @@ module.exports = {
     dialect: 'postgres',
   },
   production: {
-    username: "root",
-    password: null,
-    database: "database_production",
-    host: "127.0.0.1",
-    dialect: "mysql",
+    username: process.env.PRODUCTION_USERNAME,
+    password: process.env.PRODUCTION_PASSWORD,
+    database: process.env.PRODUCTION_DATABASE,
+    host: process.env.PRODUCTION_HOST,
+    dialect: "postgres",
   },
 };
