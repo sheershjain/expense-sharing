@@ -1,8 +1,7 @@
 'use strict';
 const {
-  Model
+  Model, Sequelize
 } = require('sequelize');
-const { Sequelize } = require('.');
 module.exports = (sequelize, DataTypes) => {
   class Transaction extends Model {
     /**
@@ -11,7 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.User, {
+        foreignKey: 'payee_id',
+        targetKey: 'id'
+      });
+      this.belongsTo(models.User, {
+        foreignKey: 'payer_id',
+        targetKey: 'id'
+      });
     }
   }
   Transaction.init({
@@ -22,12 +28,18 @@ module.exports = (sequelize, DataTypes) => {
     payee_id: {
       allowNull: false,
       type: Sequelize.UUID,
-      defaultValue: Sequelize.literal('uuid_generate_v4()')
+      references: {
+        model: 'user',
+        key: 'id',
+      }
     },
     payer_id: {
       allowNull: false,
       type: Sequelize.UUID,
-      defaultValue: Sequelize.literal('uuid_generate_v4()')
+      references: {
+        model: 'user',
+        key: 'id',
+      }
     },
     amount: {
       type: Sequelize.FLOAT,
