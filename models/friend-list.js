@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   FriendList.init({
-    friend_one: {
+    friendOne: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       }
     },
-    friend_two: {
+    friendTwo: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -39,7 +39,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: Sequelize.ENUM,
-      values: ['pending', 'approved']
+      values: ['pending', 'approved'],
+      defaultValue: 'pending'
     }
   }, {
     sequelize,

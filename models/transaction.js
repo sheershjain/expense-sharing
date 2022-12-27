@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.STRING,
       allowNull: false
     },
-    payee_id: {
+    payeeId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       }
     },
-    payer_id: {
+    payerId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -45,16 +45,16 @@ module.exports = (sequelize, DataTypes) => {
       type: Sequelize.FLOAT,
       allowNull: true
     },
-    split_type: {
+    splitType: {
       type: Sequelize.ENUM,
       values: ['equally', 'unequally', 'exactly']
     },
-    group_id: {
+    groupId: {
       allowNull: true,
       type: Sequelize.UUID,
       defaultValue: Sequelize.literal('uuid_generate_v4()')
     },
-    is_settle: {
+    isSettle: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
     }

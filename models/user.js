@@ -20,20 +20,20 @@ module.exports = (sequelize, DataTypes) => {
       });
       this.hasMany(models.FriendList, {
         foreignKey: 'friend_one',
-        as: 'friend_one'
+        as: 'friendOne'
       });
       this.hasMany(models.FriendList, {
         foreignKey: 'friend_two',
-        as: 'friend_two'
+        as: 'friendTwo'
       });
     }
   }
   User.init({
-    first_name: {
+    firstName: {
       type: Sequelize.STRING,
       allowNull: false
     },
-    last_name: {
+    lastName: {
       type: Sequelize.STRING,
       allowNull: false
     },
