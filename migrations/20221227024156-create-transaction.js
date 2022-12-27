@@ -16,12 +16,18 @@ module.exports = {
       payee_id: {
         allowNull: false,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()')
+        references: {
+          model: 'user',
+          key: 'id',
+        }
       },
       payer_id: {
         allowNull: false,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()')
+        references: {
+          model: 'user',
+          key: 'id',
+        }
       },
       amount: {
         type: Sequelize.FLOAT,
