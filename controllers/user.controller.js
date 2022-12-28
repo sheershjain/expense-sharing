@@ -24,7 +24,22 @@ const userLogin = async (req, res, next) => {
   }
 };
 
+const refreshToken = async (req, res, next) => {
+  try {
+    const { userId: userId, token: refreshToken } = req.body;
+
+    const data = await userService.refreshToken(refreshToken, userId);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   userSignup,
   userLogin,
+  refreshToken,
 };

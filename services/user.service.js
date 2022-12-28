@@ -66,7 +66,23 @@ const userLogin = async (payload) => {
   };
 };
 
+const refreshToken = async (refreshToken, userId) => {
+  let newAccessToken = jwt.sign(
+    { userId: userId },
+    process.env.SECRET_KEY_ACCESS,
+    {
+      expiresIn: process.env.JWT_ACCESS_EXPIRATION,
+    }
+  );
+
+  return {
+    accessToken: newAccessToken,
+    refreshToken,
+  };
+};
+
 module.exports = {
   userSignup,
   userLogin,
+  refreshToken,
 };

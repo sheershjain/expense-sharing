@@ -3,6 +3,7 @@ const { Router } = require("express");
 const controllers = require("../controllers");
 const genericResponse = require("../helper/generic-response.helper");
 const validator = require("../validators");
+const { checkRefreshToken } = require("../middlewares/auth");
 
 const router = Router();
 
@@ -17,6 +18,13 @@ router.post(
   "/login",
   validator.userValidator.loginSchema,
   controllers.user.userLogin,
+  genericResponse.sendResponse
+);
+
+router.get(
+  "/refresh-token",
+  checkRefreshToken,
+  controllers.user.refreshToken,
   genericResponse.sendResponse
 );
 
