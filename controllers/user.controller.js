@@ -12,6 +12,19 @@ const userSignup = async (req, res, next) => {
   }
 };
 
+const userLogin = async (req, res, next) => {
+  try {
+    const { body: payload } = req;
+    const data = await userService.userLogin(payload);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   userSignup,
+  userLogin,
 };

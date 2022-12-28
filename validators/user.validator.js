@@ -12,7 +12,7 @@ const complexityOptions = {
   symbol: 1,
 };
 
-const userSignupSchema = async (req, res, next) => {
+const signupSchema = async (req, res, next) => {
   const schema = Joi.object({
     firstName: Joi.string().min(1).required(),
     lastName: Joi.string().min(1).required(),
@@ -22,6 +22,16 @@ const userSignupSchema = async (req, res, next) => {
   validateRequest(req, res, next, schema, "body");
 };
 
+const loginSchema = async (req, res, next) => {
+  const schema = Joi.object({
+    email: Joi.string().email().lowercase().required(),
+    password: passwordComplexity(complexityOptions).required(),
+  });
+
+  validateRequest(req, res, next, schema, "body");
+};
+
 module.exports = {
-  userSignupSchema,
+  signupSchema,
+  loginSchema,
 };
