@@ -38,8 +38,21 @@ const refreshToken = async (req, res, next) => {
   }
 };
 
+const forgetPassword = async (req, res, next) => {
+  try {
+    const { body: payload } = req;
+    const data = await userService.forgetPassword(payload);
+    res.data = data;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
+
 module.exports = {
   userSignup,
   userLogin,
   refreshToken,
+  forgetPassword,
 };

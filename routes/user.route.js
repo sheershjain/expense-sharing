@@ -28,4 +28,11 @@ router.get(
   genericResponse.sendResponse
 );
 
+router.post(
+  "/forget-password",
+  validator.userValidator.forgetPassword,
+  controllers.user.forgetPassword,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

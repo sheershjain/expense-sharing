@@ -31,7 +31,15 @@ const loginSchema = async (req, res, next) => {
   validateRequest(req, res, next, schema, "body");
 };
 
+const forgetPassword = async (req, res, next) => {
+  const schema = Joi.object({
+    email: Joi.string().email().lowercase().required(),
+  });
+  validateRequest(req, res, next, schema, "body");
+};
+
 module.exports = {
   signupSchema,
   loginSchema,
+  forgetPassword,
 };
