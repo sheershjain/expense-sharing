@@ -35,4 +35,11 @@ router.post(
   genericResponse.sendResponse
 );
 
+router.post(
+  "/reset-password/:token",
+  validator.userValidator.resetPasswordSchema,
+  controllers.user.resetPassword,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

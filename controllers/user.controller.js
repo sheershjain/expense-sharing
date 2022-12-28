@@ -19,7 +19,6 @@ const userLogin = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -49,10 +48,22 @@ const forgetPassword = async (req, res, next) => {
   }
 };
 
+const resetPassword = async (req, res, next) => {
+  try {
+    console.log(req.params);
+    const { body: payload } = req;
+    const data = await userService.resetPassword(payload, req.params);
+    res.data = data;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
 
 module.exports = {
   userSignup,
   userLogin,
   refreshToken,
   forgetPassword,
+  resetPassword,
 };

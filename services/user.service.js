@@ -35,8 +35,7 @@ const userLogin = async (payload) => {
 
   let key = user.dataValues.id + "-refresh-token";
   let refreshToken = await redisClient.get(key);
-
-  if (!refreshToken) {
+    if (!refreshToken) {
     const match = await bcrypt.compareSync(password, user.dataValues.password);
     if (!match) {
       throw new Error("Wrong email or password");
@@ -108,9 +107,35 @@ const forgetPassword = async (payload) => {
   return "send reset password link successfully";
 };
 
+const resetPassword = async (payload, params) => {
+  const resetToken = params.token;
+  const password = payload.password;
+  let key = resetToken + "-reset-password-link";
+  const cachedUserId = await redisClient.get(key);
+  if (!cachedUserId) {
+    throw new Error("Invalid Reset Link");
+  }
+
+  const userExist = await models.User.findOne({ where: { id: cachedUserId } });
+  if (!userExist) {
+    throw new Error("User Not Found");
+  }
+  await redisClient.del(key);
+
+  await models.User.update(
+    { password: await bcrypt.hash(password, 10) },
+    { where: { email: userExist.dataValues.email } }
+  );
+  const email_body = `Password reset successfull`;
+  const email_subject = `Password reset`;
+  await mailer.sendMail(email_body, email_subject, userExist.dataValues.email);
+  return "Password reset successfully";
+};
+
 module.exports = {
   userSignup,
   userLogin,
   refreshToken,
   forgetPassword,
+  resetPassword,
 };
