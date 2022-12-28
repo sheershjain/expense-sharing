@@ -3,7 +3,7 @@ const {
   Model, Sequelize
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class FriendList extends Model {
+  class Transaction extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,17 +11,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.User, {
-        foreignKey: 'friend_one',
+        foreignKey: 'payee_id',
         targetKey: 'id'
       });
       this.belongsTo(models.User, {
-        foreignKey: 'friend_two',
+        foreignKey: 'payer_id',
         targetKey: 'id'
       });
     }
   }
-  FriendList.init({
-    friendOne: {
+  Transaction.init({
+    name: {
+      type: Sequelize.STRING,
+      allowNull: false
+    },
+    payeeId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -29,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       }
     },
-    friendTwo: {
+    payerId: {
       allowNull: false,
       type: Sequelize.UUID,
       references: {
@@ -37,16 +41,28 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       }
     },
-    status: {
+    amount: {
+      type: Sequelize.FLOAT,
+      allowNull: true
+    },
+    splitType: {
       type: Sequelize.ENUM,
-      values: ['pending', 'approved'],
-      defaultValue: 'pending'
+      values: ['equally', 'unequally', 'exactly']
+    },
+    groupId: {
+      allowNull: true,
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.literal('uuid_generate_v4()')
+    },
+    isSettle: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
     }
   }, {
     sequelize,
     paranoid: true,
-    tableName: 'friend_list',
-    modelName: 'FriendList',
+    tableName: 'transaction',
+    modelName: 'Transaction',
   });
-  return FriendList;
+  return Transaction;
 };
