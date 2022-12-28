@@ -12,12 +12,18 @@ module.exports = {
       friend_one: {
         allowNull: false,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()')
+        references: {
+          model: 'user',
+          key: 'id',
+        }
       },
       friend_two: {
         allowNull: false,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()')
+        references: {
+          model: 'user',
+          key: 'id',
+        }
       },
       status: {
         type: Sequelize.ENUM,

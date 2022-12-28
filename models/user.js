@@ -10,22 +10,30 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      this.hasMany(models.Transaction, {
+        foreignKey: 'payee_id',
+        as: 'payee'
+      });
+      this.hasMany(models.Transaction, {
+        foreignKey: 'payer_id',
+        as: 'payer'
+      });
       this.hasMany(models.FriendList, {
         foreignKey: 'friend_one',
-        as: 'friend_one'
+        as: 'friendOne'
       });
       this.hasMany(models.FriendList, {
         foreignKey: 'friend_two',
-        as: 'friend_two'
+        as: 'friendTwo'
       });
     }
   }
   User.init({
-    first_name: {
+    firstName: {
       type: Sequelize.STRING,
       allowNull: false
     },
-    last_name: {
+    lastName: {
       type: Sequelize.STRING,
       allowNull: false
     },
@@ -37,12 +45,7 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: Sequelize.STRING,
       allowNull: false
-    },
-    google_id: {
-      type: Sequelize.STRING,
-      allowNull: true,
-      unique: true
-    },
+    }
   }, {
     sequelize,
     paranoid: true,
