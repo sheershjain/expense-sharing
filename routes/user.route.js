@@ -50,4 +50,11 @@ router.patch(
   genericResponse.sendResponse
 );
 
+router.delete(
+  "/",
+  checkAccessToken,
+  controllers.user.deleteUser,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

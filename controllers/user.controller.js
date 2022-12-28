@@ -71,6 +71,16 @@ const updateUser = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  try {
+    const data = await userService.deleteUser(req.user);
+    res.data = data;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   userSignup,
   userLogin,
@@ -78,4 +88,5 @@ module.exports = {
   forgetPassword,
   resetPassword,
   updateUser,
+  deleteUser,
 };

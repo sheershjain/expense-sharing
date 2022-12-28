@@ -151,6 +151,26 @@ const updateUser = async (userData, payload) => {
   return;
 };
 
+const deleteUser = async (userData) => {
+  const user = await models.User.findOne({
+    where: {
+      id: userData.id,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User Not Found");
+  }
+
+  await models.User.destroy({
+    where: {
+      id: userData.id,
+    },
+  });
+
+  return "User successfully deleted";
+};
+
 module.exports = {
   userSignup,
   userLogin,
@@ -158,4 +178,5 @@ module.exports = {
   forgetPassword,
   resetPassword,
   updateUser,
+  deleteUser,
 };
