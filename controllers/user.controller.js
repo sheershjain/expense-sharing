@@ -60,10 +60,22 @@ const resetPassword = async (req, res, next) => {
   }
 };
 
+const updateUser = async (req, res, next) => {
+  try {
+    const { body: payload } = req;
+    const data = await userService.updateUser((userData = req.user), payload);
+    res.data = data;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   userSignup,
   userLogin,
   refreshToken,
   forgetPassword,
   resetPassword,
+  updateUser,
 };

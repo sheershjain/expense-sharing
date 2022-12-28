@@ -35,7 +35,7 @@ const userLogin = async (payload) => {
 
   let key = user.dataValues.id + "-refresh-token";
   let refreshToken = await redisClient.get(key);
-    if (!refreshToken) {
+  if (!refreshToken) {
     const match = await bcrypt.compareSync(password, user.dataValues.password);
     if (!match) {
       throw new Error("Wrong email or password");
@@ -132,10 +132,30 @@ const resetPassword = async (payload, params) => {
   return "Password reset successfully";
 };
 
+const updateUser = async (userData, payload) => {
+  let user = await models.User.findOne({
+    where: {
+      email: userData.email,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User Not Found!");
+  }
+
+  user = await models.User.update(payload, {
+    where: {
+      id: userData.id,
+    },
+  });
+  return;
+};
+
 module.exports = {
   userSignup,
   userLogin,
   refreshToken,
   forgetPassword,
   resetPassword,
+  updateUser,
 };
