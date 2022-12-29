@@ -1,66 +1,66 @@
 const { Router } = require("express");
 
-const controllers = require("../controllers");
+const userController = require("../controllers/user.controller");
 const genericResponse = require("../helper/generic-response.helper");
-const validator = require("../validators");
+const userValidator = require("../validators/user.validator");
 const { checkAccessToken, checkRefreshToken } = require("../middlewares/auth");
 
 const router = Router();
 
 router.post(
   "/signup",
-  validator.userValidator.signupSchema,
-  controllers.user.userSignup,
+  userValidator.signupSchema,
+  userController.userSignup,
   genericResponse.sendResponse
 );
 
 router.post(
   "/login",
-  validator.userValidator.loginSchema,
-  controllers.user.userLogin,
+  userValidator.loginSchema,
+  userController.userLogin,
   genericResponse.sendResponse
 );
 
 router.get(
   "/refresh-token",
   checkRefreshToken,
-  controllers.user.refreshToken,
+  userController.refreshToken,
   genericResponse.sendResponse
 );
 
 router.post(
   "/forget-password",
-  validator.userValidator.forgetPassword,
-  controllers.user.forgetPassword,
+  userValidator.forgetPassword,
+  userController.forgetPassword,
   genericResponse.sendResponse
 );
 
 router.post(
   "/reset-password/:token",
-  validator.userValidator.resetPasswordSchema,
-  controllers.user.resetPassword,
+  userValidator.resetPasswordSchema,
+  userController.resetPassword,
   genericResponse.sendResponse
 );
 
 router.patch(
   "/",
-  validator.userValidator.userUpdateSchema,
+  userValidator.userUpdateSchema,
   checkAccessToken,
-  controllers.user.updateUser,
+  userController.updateUser,
   genericResponse.sendResponse
 );
 
 router.delete(
   "/",
   checkAccessToken,
-  controllers.user.deleteUser,
+  userController.deleteUser,
   genericResponse.sendResponse
 );
 
 router.post(
   "/logout",
   checkAccessToken,
-  controllers.user.userLogout,
+  userController.userLogout,
   genericResponse.sendResponse
 );
 
