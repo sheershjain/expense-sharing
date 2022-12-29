@@ -171,6 +171,20 @@ const deleteUser = async (userData) => {
   return "User successfully deleted";
 };
 
+const userLogout = async (userData) => {
+  let userId = userData.id;
+
+  let user = await models.User.findOne({
+    where: {
+      id: userId,
+    },
+  });
+  if (!user) throw new Error("User not found!");
+  let key = userId + "-refresh-token";
+  redisClient.del(key);
+  return;
+};
+
 module.exports = {
   userSignup,
   userLogin,
@@ -179,4 +193,5 @@ module.exports = {
   resetPassword,
   updateUser,
   deleteUser,
+  userLogout,
 };

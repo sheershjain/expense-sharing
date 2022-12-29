@@ -57,4 +57,11 @@ router.delete(
   genericResponse.sendResponse
 );
 
+router.post(
+  "/logout",
+  checkAccessToken,
+  controllers.user.userLogout,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

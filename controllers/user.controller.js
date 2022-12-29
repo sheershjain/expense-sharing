@@ -81,6 +81,16 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+const userLogout = async (req, res, next) => {
+  try {
+    const data = await userService.userLogout(req.user);
+    res.data = data;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   userSignup,
   userLogin,
@@ -89,4 +99,5 @@ module.exports = {
   resetPassword,
   updateUser,
   deleteUser,
+  userLogout,
 };
