@@ -13,21 +13,17 @@ module.exports = {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'user',
-          key: 'id',
-        }
+          model: "user",
+          key: "id",
+        },
       },
       friend_two: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'user',
-          key: 'id',
-        }
-      },
-      status: {
-        type: Sequelize.ENUM,
-        values: ['pending', 'approved']
+          model: "user",
+          key: "id",
+        },
       },
       created_at: {
         allowNull: false,
