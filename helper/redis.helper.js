@@ -15,8 +15,8 @@ const get = async (key) => {
   return data;
 };
 
-const set = async (key, value) => {
-  return await client.set(key, value, { EX: process.env.REDIS_EXT });
+const set = async (key, value, time) => {
+  return await client.set(key, value, { EX: process.env.REDIS_EXT * time });
 };
 
 const reset = async () => {

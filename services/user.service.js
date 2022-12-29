@@ -57,7 +57,7 @@ const userLogin = async (payload) => {
     }
   );
 
-  await redisClient.set(key, refreshToken);
+  await redisClient.set(key, refreshToken, 60 * 24);
 
   return {
     id: user.id,
@@ -97,7 +97,7 @@ const forgetPassword = async (payload) => {
   let randomToken = UniqueStringGenerator.UniqueString();
   let resetPassawordLink = `${process.env.BASE_URL}/api/user/reset-password/${randomToken}`;
   let key = randomToken + "-reset-password-link";
-  await redisClient.set(key, user.dataValues.id);
+  await redisClient.set(key, user.dataValues.id, 10);
 
   let recipient = email;
   let subject = "Reset Password Link";
