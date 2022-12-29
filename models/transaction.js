@@ -55,7 +55,10 @@ module.exports = (sequelize, DataTypes) => {
       groupId: {
         allowNull: true,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.literal("uuid_generate_v4()"),
+        references: {
+          model: "group",
+          key: "id",
+        },
       },
       isSettle: {
         type: Sequelize.BOOLEAN,
