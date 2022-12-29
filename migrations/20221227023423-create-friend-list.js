@@ -1,52 +1,48 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('friend_list', {
+    await queryInterface.createTable("friend_list", {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.literal('uuid_generate_v4()')
+        defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
       friend_one: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'user',
-          key: 'id',
-        }
+          model: "user",
+          key: "id",
+        },
       },
       friend_two: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
-          model: 'user',
-          key: 'id',
-        }
-      },
-      status: {
-        type: Sequelize.ENUM,
-        values: ['pending', 'approved']
+          model: "user",
+          key: "id",
+        },
       },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
       },
       updated_at: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.NOW
+        defaultValue: Sequelize.NOW,
       },
       deleted_at: {
         allowNull: true,
         type: Sequelize.DATE,
-        defaultValue: null
-      }
+        defaultValue: null,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('friend_list');
-  }
+    await queryInterface.dropTable("friend_list");
+  },
 };

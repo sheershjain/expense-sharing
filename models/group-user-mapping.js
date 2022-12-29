@@ -10,9 +10,13 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.belongsTo(models.User, {
         foreignKey: "user_id",
+        targetKey: "id",
+        as: "user"
       });
       this.belongsTo(models.Group, {
         foreignKey: "group_id",
+        targetKey: "id",
+        as: "group"
       });
     }
   }

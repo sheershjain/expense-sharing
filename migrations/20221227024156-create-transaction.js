@@ -13,6 +13,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      base_amount: {
+        type: Sequelize.FLOAT,
+        allowNull: true,
+      },
       payee_id: {
         allowNull: false,
         type: Sequelize.UUID,
@@ -29,7 +33,7 @@ module.exports = {
           key: "id",
         },
       },
-      amount: {
+      amount_to_pay: {
         type: Sequelize.FLOAT,
         allowNull: true,
       },
