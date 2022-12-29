@@ -9,50 +9,54 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.hasMany(models.Transaction, {
-        foreignKey: 'payee_id',
-        as: 'payee'
+        foreignKey: "payee_id",
+        as: "TransactionsAsPayee",
       });
       this.hasMany(models.Transaction, {
-        foreignKey: 'payer_id',
-        as: 'payer'
+        foreignKey: "payer_id",
+        as: "TransactionsAsPayer",
       });
       this.hasMany(models.FriendList, {
-        foreignKey: 'friend_one',
-        as: 'friendOne'
+        foreignKey: "friend_one",
+        as: "friendOne",
       });
       this.hasMany(models.FriendList, {
-        foreignKey: 'friend_two',
-        as: 'friendTwo'
+        foreignKey: "friend_two",
+        as: "friendTwo",
       });
       this.belongsToMany(models.Group, {
         through: models.GroupUserMapping,
-        foreignKey: 'user_id',
+        foreignKey: "user_id",
+        as: "groups",
       });
     }
   }
-  User.init({
-    firstName: {
-      type: Sequelize.STRING,
-      allowNull: false
+  User.init(
+    {
+      firstName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      lastName: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
     },
-    lastName: {
-      type: Sequelize.STRING,
-      allowNull: false
-    },
-    email: {
-      type: Sequelize.STRING,
-      allowNull: false,
-      unique: true
-    },
-    password: {
-      type: Sequelize.STRING,
-      allowNull: false
+    {
+      sequelize,
+      paranoid: true,
+      tableName: "user",
+      modelName: "User",
     }
-  }, {
-    sequelize,
-    paranoid: true,
-    tableName: 'user',
-    modelName: 'User',
-  });
+  );
   return User;
 };
