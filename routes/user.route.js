@@ -44,8 +44,8 @@ router.post(
 
 router.patch(
   "/",
-  userValidator.userUpdateSchema,
   checkAccessToken,
+  userValidator.userUpdateSchema,
   userController.updateUser,
   genericResponse.sendResponse
 );
