@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model, Sequelize
-} = require('sequelize');
+"use strict";
+const { Model, Sequelize } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class FriendList extends Model {
     /**
@@ -11,42 +9,40 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.User, {
-        foreignKey: 'friend_one',
-        targetKey: 'id'
+        foreignKey: "friend_one",
+        targetKey: "id",
       });
       this.belongsTo(models.User, {
-        foreignKey: 'friend_two',
-        targetKey: 'id'
+        foreignKey: "friend_two",
+        targetKey: "id",
       });
     }
   }
-  FriendList.init({
-    friendOne: {
-      allowNull: false,
-      type: Sequelize.UUID,
-      references: {
-        model: 'user',
-        key: 'id',
-      }
+  FriendList.init(
+    {
+      friend_one: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: "user",
+          key: "id",
+        },
+      },
+      friend_two: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        references: {
+          model: "user",
+          key: "id",
+        },
+      },
     },
-    friendTwo: {
-      allowNull: false,
-      type: Sequelize.UUID,
-      references: {
-        model: 'user',
-        key: 'id',
-      }
-    },
-    status: {
-      type: Sequelize.ENUM,
-      values: ['pending', 'approved'],
-      defaultValue: 'pending'
+    {
+      sequelize,
+      paranoid: true,
+      tableName: "friend_list",
+      modelName: "FriendList",
     }
-  }, {
-    sequelize,
-    paranoid: true,
-    tableName: 'friend_list',
-    modelName: 'FriendList',
-  });
+  );
   return FriendList;
 };
