@@ -11,10 +11,12 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, {
         foreignKey: "payee_id",
         targetKey: "id",
+        as: "payeeUser",
       });
       this.belongsTo(models.User, {
         foreignKey: "payer_id",
         targetKey: "id",
+        as: "payerUser",
       });
     }
   }
