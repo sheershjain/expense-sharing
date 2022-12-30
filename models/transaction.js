@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Group, {
         foreignKey: "group_id",
         targetKey: "id",
-        as: "groups",
+        as: "group",
       });
     }
   }

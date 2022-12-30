@@ -17,11 +17,12 @@ const addExpenseSchema = async (req, res, next) => {
     payerId: Joi.string().guid().required(),
     splitType: Joi.string().valid("equally", "unequally", "exactly").required(),
     payerAmount: Joi.number(),
+    groupId: Joi.string(),
   });
   validateRequest(req, res, next, schema, "body");
 };
 
-const simplifyDebtsSchema = async (req, res, next) => {
+const targetUserIdCheck = async (req, res, next) => {
   const schema = Joi.object({
     id: Joi.string().guid().required(),
   });
@@ -31,5 +32,5 @@ const simplifyDebtsSchema = async (req, res, next) => {
 module.exports = {
   addFriendSchema,
   addExpenseSchema,
-  simplifyDebtsSchema,
+  targetUserIdCheck,
 };

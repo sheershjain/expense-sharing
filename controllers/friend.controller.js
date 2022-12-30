@@ -48,9 +48,25 @@ const overallExpenseOfCurrentUser = async (req, res, next) => {
   }
 };
 
+const AllTransactionWithTargetUser = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await friendService.AllTransactionWithTargetUser(
+      req.user,
+      params
+    );
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   addFriend,
   addExpense,
   simplifyDebts,
   overallExpenseOfCurrentUser,
+  AllTransactionWithTargetUser,
 };

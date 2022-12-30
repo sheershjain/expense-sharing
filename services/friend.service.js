@@ -133,9 +133,49 @@ const overallExpenseOfCurrentUser = async (userData) => {
   };
 };
 
+const AllTransactionWithTargetUser = async (userData, params) => {
+  let currentUserId = userData.id;
+  let targetUserId = params.id;
+
+  let targetUserData = await models.User.findOne({
+    where: { id: targetUserId },
+  });
+  if (!targetUserData) throw new Error("User Not Found!");
+
+  let lentToTargetUser = await models.Transaction.findAll({
+    where: {
+      payeeId: currentUserId,
+      payerId: targetUserId,
+    },
+    include: [
+      {
+        model: models.Group,
+        as: "group",
+      },
+    ],
+  });
+  let borrowFromTargetUser = await models.Transaction.findAll({
+    where: {
+      payeeId: targetUserId,
+      payerId: currentUserId,
+    },
+    include: [
+      {
+        model: models.Group,
+        as: "group",
+      },
+    ],
+  });
+  return {
+    borrowFromTargetUser,
+    lentToTargetUser,
+  };
+};
+
 module.exports = {
   addFriend,
   addExpense,
   simplifyDebts,
   overallExpenseOfCurrentUser,
+  AllTransactionWithTargetUser,
 };

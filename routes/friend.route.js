@@ -29,6 +29,7 @@ router.post(
 router.get(
   "/simplify-debts/:id",
   checkAccessToken,
+  friendValidator.targetUserIdCheck,
   friendController.simplifyDebts,
   friendController.simplifyDebts,
   genericResponse.sendResponse
@@ -38,6 +39,15 @@ router.get(
   "/all",
   checkAccessToken,
   friendController.overallExpenseOfCurrentUser,
+  genericResponse.sendResponse
+);
+
+router.get(
+  "/transactions/:id",
+  checkAccessToken,
+  friendValidator.targetUserIdCheck,
+  friendController.AllTransactionWithTargetUser,
+  friendSerializer.AllTransactionWithTargetUserData,
   genericResponse.sendResponse
 );
 
