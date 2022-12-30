@@ -13,15 +13,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      baseAmount: {
+      base_amount: {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      splitType: {
+      split_type: {
         type: Sequelize.ENUM,
         values: ["equally", "unequally", "exactly"],
       },
-      groupId: {
+      group_id: {
         allowNull: true,
         type: Sequelize.UUID,
         references: {

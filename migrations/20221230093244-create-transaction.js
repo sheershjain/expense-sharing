@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
-      expenseId: {
+      expense_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
@@ -17,7 +17,7 @@ module.exports = {
           key: "id",
         },
       },
-      payeeId: {
+      payee_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
@@ -25,7 +25,7 @@ module.exports = {
           key: "id",
         },
       },
-      payerId: {
+      payer_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
@@ -33,11 +33,11 @@ module.exports = {
           key: "id",
         },
       },
-      amountToPay: {
+      amount_to_pay: {
         type: Sequelize.INTEGER,
         allowNull: true,
       },
-      isSettle: {
+      is_settle: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
       },
