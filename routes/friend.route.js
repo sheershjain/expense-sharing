@@ -17,4 +17,13 @@ router.post(
   genericResponse.sendResponse
 );
 
+router.post(
+  "/expense",
+  checkAccessToken,
+  friendValidator.addExpenseSchema,
+    friendController.addExpense,
+  friendSerializer.addExpenseData,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

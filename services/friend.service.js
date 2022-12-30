@@ -35,6 +35,49 @@ const addFriend = async (payload, userData) => {
   return createRelation;
 };
 
+const addExpense = async (payload, userData) => {
+  let { payeeId, payerId, baseAmount, splitType, payerAmount } = payload;
+  let amountToPay;
+
+  let payer = await models.User.findOne({
+    where: { id: payerId },
+  });
+  if (!payer) throw new Error("User Not Found!");
+  let payee = await models.User.findOne({
+    where: { id: payeeId },
+  });
+  if (!payee) throw new Error("User Not Found!");
+
+  let existingRelation = await models.FriendList.findOne({
+    where: {
+      [Op.or]: [
+        {
+          [Op.and]: [{ friendOne: payeeId }, { friendTwo: payerId }],
+        },
+        {
+          [Op.and]: [{ friendOne: payerId }, { friendTwo: payeeId }],
+        },
+      ],
+    },
+  });
+  if (!existingRelation)
+    addFriend({ email: payer.dataValues.email }, { id: payee.dataValues.id });
+
+  if (splitType === "exactly") {
+    amountToPay = baseAmount;
+  } else if (splitType === "equally") {
+    amountToPay = baseAmount / 2;
+  } else {
+    amountToPay = payerAmount;
+  }
+  delete payload.payerAmount;
+  payload.payeeId = payeeId;
+  payload.amountToPay = amountToPay;
+  let transaction = await models.Transaction.create(payload);
+  return transaction;
+};
+
 module.exports = {
   addFriend,
+  addExpense,
 };
