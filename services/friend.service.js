@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 
 const models = require("../models");
 
@@ -77,7 +77,41 @@ const addExpense = async (payload, userData) => {
   return transaction;
 };
 
+const simplifyDebts = async (userData, params) => {
+  let targetUser = params.id;
+  let currentUser = userData.id;
+
+  let targetUserData = await models.Transaction.findAll({
+    attributes: [
+      [Sequelize.fn("sum", Sequelize.col("amount_to_pay")), "targetUserAmount"],
+    ],
+    where: {
+      payeeId: currentUser,
+      payerId: targetUser,
+    },
+  });
+  let currentUserData = await models.Transaction.findAll({
+    attributes: [
+      [
+        Sequelize.fn("sum", Sequelize.col("amount_to_pay")),
+        "currentUserAmount",
+      ],
+    ],
+    where: {
+      payeeId: targetUser,
+      payerId: currentUser,
+    },
+  });
+  let amountDifference =
+    currentUserData[0].dataValues.currentUserAmount -
+    targetUserData[0].dataValues.targetUserAmount;
+  return {
+    amountDifference,
+  };
+};
+
 module.exports = {
   addFriend,
   addExpense,
+  simplifyDebts,
 };

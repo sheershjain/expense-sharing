@@ -26,4 +26,11 @@ router.post(
   genericResponse.sendResponse
 );
 
+router.get(
+  "/simplify-debts/:id",
+  checkAccessToken,
+  friendController.simplifyDebts,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

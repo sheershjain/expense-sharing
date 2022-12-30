@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       baseAmount: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: true,
       },
       payeeId: {
@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       amountToPay: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: true,
       },
       splitType: {

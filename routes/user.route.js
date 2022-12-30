@@ -3,6 +3,7 @@ const { Router } = require("express");
 const userController = require("../controllers/user.controller");
 const genericResponse = require("../helper/generic-response.helper");
 const userValidator = require("../validators/user.validator");
+const userSerializer = require("../serializers/user.serializer");
 const { checkAccessToken, checkRefreshToken } = require("../middlewares/auth");
 
 const router = Router();
@@ -11,6 +12,7 @@ router.post(
   "/signup",
   userValidator.signupSchema,
   userController.userSignup,
+  userSerializer.userSignupData,
   genericResponse.sendResponse
 );
 
