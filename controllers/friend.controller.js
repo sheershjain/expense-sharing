@@ -37,8 +37,20 @@ const simplifyDebts = async (req, res, next) => {
   }
 };
 
+const overallExpenseOfCurrentUser = async (req, res, next) => {
+  try {
+    const data = await friendService.overallExpenseOfCurrentUser(req.user);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   addFriend,
   addExpense,
   simplifyDebts,
+  overallExpenseOfCurrentUser,
 };

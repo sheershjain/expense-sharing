@@ -103,8 +103,31 @@ const simplifyDebts = async (userData, params) => {
     },
   });
   let amountDifference =
-    currentUserData[0].dataValues.currentUserAmount -
-    targetUserData[0].dataValues.targetUserAmount;
+    targetUserData[0].dataValues.targetUserAmount -
+    currentUserData[0].dataValues.currentUserAmount;
+  return {
+    amountDifference,
+  };
+};
+
+const overallExpenseOfCurrentUser = async (userData) => {
+  let currentUserId = userData.id;
+
+  let borrow = await models.Transaction.findAll({
+    attributes: [
+      [Sequelize.fn("sum", Sequelize.col("amount_to_pay")), "borrow"],
+    ],
+    where: {
+      payerId: currentUserId,
+    },
+  });
+  let lent = await models.Transaction.findAll({
+    attributes: [[Sequelize.fn("sum", Sequelize.col("amount_to_pay")), "lent"]],
+    where: {
+      payeeId: currentUserId,
+    },
+  });
+  let amountDifference = lent[0].dataValues.lent - borrow[0].dataValues.borrow;
   return {
     amountDifference,
   };
@@ -114,4 +137,5 @@ module.exports = {
   addFriend,
   addExpense,
   simplifyDebts,
+  overallExpenseOfCurrentUser,
 };

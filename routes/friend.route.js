@@ -21,7 +21,7 @@ router.post(
   "/expense",
   checkAccessToken,
   friendValidator.addExpenseSchema,
-    friendController.addExpense,
+  friendController.addExpense,
   friendSerializer.addExpenseData,
   genericResponse.sendResponse
 );
@@ -30,6 +30,14 @@ router.get(
   "/simplify-debts/:id",
   checkAccessToken,
   friendController.simplifyDebts,
+  friendController.simplifyDebts,
+  genericResponse.sendResponse
+);
+
+router.get(
+  "/all",
+  checkAccessToken,
+  friendController.overallExpenseOfCurrentUser,
   genericResponse.sendResponse
 );
 
