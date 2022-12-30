@@ -16,18 +16,20 @@ const addFriendData = (req, res, next) => {
 const addExpenseData = (req, res, next) => {
   let reciveData = res.data || {};
   let resultData = {};
-
   if (reciveData) {
     resultData = {
-      id: reciveData.dataValues.id,
-      name: reciveData.dataValues.name,
-      baseAmount: reciveData.dataValues.baseAmount,
-      payeeId: reciveData.dataValues.payeeId,
-      payerId: reciveData.dataValues.payerId,
-      splitType: reciveData.dataValues.splitType,
-      payeeId: reciveData.dataValues.payeeId,
-      amountToPay: reciveData.dataValues.amountToPay,
-      isSettle: reciveData.dataValues.isSettle,
+      expense: {
+        id: reciveData.expense.dataValues.id,
+        name: reciveData.expense.dataValues.name,
+        baseAmount: reciveData.expense.dataValues.baseAmount,
+        splitType: reciveData.expense.dataValues.splitType,
+        transaction: {
+          payeeId: reciveData.transaction.dataValues.payeeId,
+          payerId: reciveData.transaction.dataValues.payerId,
+          amountToPay: reciveData.transaction.dataValues.amountToPay,
+          isSettle: reciveData.transaction.dataValues.isSettle,
+        },
+      },
     };
   }
   res.data = resultData;
@@ -44,22 +46,24 @@ const AllTransactionWithTargetUserData = (req, res, next) => {
     reciveData.borrowFromTargetUser.forEach((element) => {
       let parentObject = {
         id: element.dataValues.id,
-        name: element.dataValues.name,
-        baseAmount: element.dataValues.baseAmount,
         payeeId: element.dataValues.payeeId,
-        payerId: element.dataValues.payerId,
-        splitType: element.dataValues.splitType,
-        payeeId: element.dataValues.payeeId,
+        payerId: element.dataValues.payeeId,
         amountToPay: element.dataValues.amountToPay,
         isSettle: element.dataValues.isSettle,
+        expense: {
+          id: element.dataValues.expense.id,
+          name: element.dataValues.expense.name,
+          baseAmount: element.dataValues.expense.baseAmount,
+          splitType: element.dataValues.expense.splitType,
+        },
       };
-      if (element.dataValues.groupId) {
+      if (element.dataValues.expense.groupId) {
         let group = {
-          id: element.dataValues.group.id,
-          name: element.dataValues.group.name,
-          category: element.dataValues.group.category,
+          id: element.dataValues.expense.group.id,
+          name: element.dataValues.expense.group.name,
+          category: element.dataValues.expense.group.category,
         };
-        parentObject.group = group;
+        parentObject.expense.group = group;
       }
       borrowFromTargetUser.push(parentObject);
     });
@@ -67,22 +71,24 @@ const AllTransactionWithTargetUserData = (req, res, next) => {
     reciveData.lentToTargetUser.forEach((element) => {
       let parentObject = {
         id: element.dataValues.id,
-        name: element.dataValues.name,
-        baseAmount: element.dataValues.baseAmount,
         payeeId: element.dataValues.payeeId,
-        payerId: element.dataValues.payerId,
-        splitType: element.dataValues.splitType,
-        payeeId: element.dataValues.payeeId,
+        payerId: element.dataValues.payeeId,
         amountToPay: element.dataValues.amountToPay,
         isSettle: element.dataValues.isSettle,
+        expense: {
+          id: element.dataValues.expense.id,
+          name: element.dataValues.expense.name,
+          baseAmount: element.dataValues.expense.baseAmount,
+          splitType: element.dataValues.expense.splitType,
+        },
       };
-      if (element.dataValues.groupId) {
+      if (element.dataValues.expense.groupId) {
         let group = {
           id: element.dataValues.group.id,
           name: element.dataValues.group.name,
           category: element.dataValues.group.category,
         };
-        parentObject.group = group;
+        parentObject.expense.group = group;
       }
       lentToTargetUser.push(parentObject);
     });

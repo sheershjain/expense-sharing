@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("transaction", {
+    await queryInterface.createTable("expense", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -17,26 +17,6 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull: true,
       },
-      payee_id: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: "user",
-          key: "id",
-        },
-      },
-      payer_id: {
-        allowNull: false,
-        type: Sequelize.UUID,
-        references: {
-          model: "user",
-          key: "id",
-        },
-      },
-      amount_to_pay: {
-        type: Sequelize.FLOAT,
-        allowNull: true,
-      },
       split_type: {
         type: Sequelize.ENUM,
         values: ["equally", "unequally", "exactly"],
@@ -48,10 +28,6 @@ module.exports = {
           model: "group",
           key: "id",
         },
-      },
-      is_settle: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
       },
       created_at: {
         allowNull: false,
@@ -71,6 +47,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("transaction");
+    await queryInterface.dropTable("expense");
   },
 };

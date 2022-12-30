@@ -1,5 +1,6 @@
 const { Op, Sequelize } = require("sequelize");
 
+const { sequelize } = require("../models");
 const models = require("../models");
 
 const addFriend = async (payload, userData) => {
@@ -39,6 +40,9 @@ const addExpense = async (payload, userData) => {
   let { payeeId, payerId, baseAmount, splitType, payerAmount } = payload;
   let amountToPay;
 
+  if (!(payeeId === userData.id || payerId === userData.id))
+    throw new Error("Access Denied!");
+
   let payer = await models.User.findOne({
     where: { id: payerId },
   });
@@ -70,11 +74,37 @@ const addExpense = async (payload, userData) => {
   } else {
     amountToPay = payerAmount;
   }
-  delete payload.payerAmount;
-  payload.payeeId = payeeId;
-  payload.amountToPay = amountToPay;
-  let transaction = await models.Transaction.create(payload);
-  return transaction;
+  let transaction, expense;
+  const t = await sequelize.transaction();
+  try {
+    expense = await models.Expense.create(
+      {
+        name: payload.name,
+        baseAmount: payload.baseAmount,
+        splitType: payload.splitType,
+        groupId: payload.groupId || null,
+      },
+      { transaction: t }
+    );
+    transaction = await models.Transaction.create(
+      {
+        expenseId: expense.dataValues.id,
+        payeeId: payeeId,
+        payerId: payerId,
+        amountToPay: amountToPay,
+      },
+      { transaction: t }
+    );
+
+    await t.commit();
+    return {
+      expense,
+      transaction,
+    };
+  } catch (error) {
+    throw new Error("Something went wrong");
+    await t.rollback();
+  }
 };
 
 const simplifyDebts = async (userData, params) => {
@@ -149,8 +179,14 @@ const AllTransactionWithTargetUser = async (userData, params) => {
     },
     include: [
       {
-        model: models.Group,
-        as: "group",
+        model: models.Expense,
+        as: "expense",
+        include: [
+          {
+            model: models.Group,
+            as: "group",
+          },
+        ],
       },
     ],
   });
@@ -161,8 +197,14 @@ const AllTransactionWithTargetUser = async (userData, params) => {
     },
     include: [
       {
-        model: models.Group,
-        as: "group",
+        model: models.Expense,
+        as: "expense",
+        include: [
+          {
+            model: models.Group,
+            as: "group",
+          },
+        ],
       },
     ],
   });

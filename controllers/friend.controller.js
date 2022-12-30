@@ -16,7 +16,7 @@ const addFriend = async (req, res, next) => {
 const addExpense = async (req, res, next) => {
   try {
     const { body: payload } = req;
-    const data = await friendService.addExpense(payload);
+    const data = await friendService.addExpense(payload, req.user);
     res.data = data;
     next();
   } catch (error) {
