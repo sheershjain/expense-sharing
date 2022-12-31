@@ -214,10 +214,56 @@ const AllTransactionWithTargetUser = async (userData, params) => {
   };
 };
 
+const removeFriend = async (userData, params) => {
+  let currentUserId = userData.id;
+  let targetUserId = params.id;
+
+  let targetUserData = await models.User.findOne({
+    where: { id: targetUserId },
+  });
+  if (!targetUserData) throw new Error("User Not Found!");
+
+  let pendingTransaction = await models.Transaction.findOne({
+    where: {
+      [Op.and]: [
+        {
+          [Op.or]: [
+            {
+              [Op.and]: [{ payeeId: currentUserId }, { payerId: targetUserId }],
+            },
+            {
+              [Op.and]: [{ payeeId: targetUserId }, { payerId: currentUserId }],
+            },
+          ],
+        },
+        {
+          isSettle: false,
+        },
+      ],
+    },
+  });
+
+  if (pendingTransaction) throw new Error("Settle up the pending tranactions");
+  await models.FriendList.destroy({
+    where: {
+      [Op.or]: [
+        {
+          [Op.and]: [{ friendOne: currentUserId }, { friendTwo: targetUserId }],
+        },
+        {
+          [Op.and]: [{ friendOne: targetUserId }, { friendTwo: currentUserId }],
+        },
+      ],
+    },
+  });
+  return;
+};
+
 module.exports = {
   addFriend,
   addExpense,
   simplifyDebts,
   overallExpenseOfCurrentUser,
   AllTransactionWithTargetUser,
+  removeFriend,
 };

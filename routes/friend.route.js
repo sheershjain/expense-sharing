@@ -51,4 +51,12 @@ router.get(
   genericResponse.sendResponse
 );
 
+router.delete(
+  "/remove/:id",
+  checkAccessToken,
+  friendValidator.targetUserIdCheck,
+  friendController.removeFriend,
+  genericResponse.sendResponse
+);
+
 module.exports = router;
