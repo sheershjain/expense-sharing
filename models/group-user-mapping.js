@@ -9,21 +9,21 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.User, {
-        foreignKey: "user_id",
+        foreignKey: "userId",
         targetKey: "id",
-        as: "user"
+        as: "user",
       });
       this.belongsTo(models.Group, {
-        foreignKey: "group_id",
+        foreignKey: "groupId",
         targetKey: "id",
-        as: "group"
+        as: "group",
       });
     }
   }
   GroupUserMapping.init(
     {
       groupId: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.UUID,
         references: {
           model: "group",

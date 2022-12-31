@@ -9,24 +9,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.hasMany(models.Transaction, {
-        foreignKey: "payee_id",
+        foreignKey: "payeeId",
         as: "TransactionsAsPayee",
       });
       this.hasMany(models.Transaction, {
-        foreignKey: "payer_id",
+        foreignKey: "payerId",
         as: "TransactionsAsPayer",
       });
       this.hasMany(models.FriendList, {
-        foreignKey: "friend_one",
+        foreignKey: "friendOne",
         as: "friendOne",
       });
       this.hasMany(models.FriendList, {
-        foreignKey: "friend_two",
+        foreignKey: "friendTwo",
         as: "friendTwo",
       });
       this.belongsToMany(models.Group, {
         through: models.GroupUserMapping,
-        foreignKey: "user_id",
+        foreignKey: "userId",
         as: "groups",
       });
     }

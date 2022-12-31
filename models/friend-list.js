@@ -9,12 +9,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       this.belongsTo(models.User, {
-        foreignKey: "friend_one",
+        foreignKey: "friendOne",
         targetKey: "id",
         as: "friendOneData"
       });
       this.belongsTo(models.User, {
-        foreignKey: "friend_two",
+        foreignKey: "friendTwo",
         targetKey: "id",
         as: "friendTwoData",
       });
