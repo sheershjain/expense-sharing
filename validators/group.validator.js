@@ -10,6 +10,20 @@ const createGroupSchema = async (req, res, next) => {
   validateRequest(req, res, next, schema, "body");
 };
 
+const addExpenseSchema = async (req, res, next) => {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    baseAmount: Joi.number().required(),
+    payeeId: Joi.string().guid().required(),
+    member: Joi.array().items(Joi.string().guid()).required(),
+    splitType: Joi.string().valid("equally", "unequally").required(),
+    payerAmount: Joi.array().items(Joi.number()),
+    groupId: Joi.string().required(),
+  });
+  validateRequest(req, res, next, schema, "body");
+};
+
 module.exports = {
   createGroupSchema,
+  addExpenseSchema,
 };

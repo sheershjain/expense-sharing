@@ -24,4 +24,13 @@ router.post(
   genericResponse.sendResponse
 );
 
+router.post(
+  "/expense",
+  // checkAccessToken,
+  groupValidator.addExpenseSchema,
+  groupController.addExpense,
+  groupSerializer.addExpenseData,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

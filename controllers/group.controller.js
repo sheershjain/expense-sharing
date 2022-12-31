@@ -27,7 +27,21 @@ const addMember = async (req, res, next) => {
   }
 };
 
+const addExpense = async (req, res, next) => {
+  try {
+    const { body: payload } = req;
+    const data = await groupService.addExpense(payload);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createGroup,
   addMember,
+  addExpense,
 };
