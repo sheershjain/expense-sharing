@@ -13,6 +13,36 @@ const createGroupData = (req, res, next) => {
   next();
 };
 
+const addMemberData = (req, res, next) => {
+  let reciveData = res.data || {};
+  let resultData = {};
+
+  if (reciveData) {
+    let group = {
+      id: reciveData[0].dataValues.group.id,
+      name: reciveData[0].dataValues.group.name,
+      category: reciveData[0].dataValues.group.category,
+    };
+    let users = [];
+    reciveData.forEach((element) => {
+      let name =
+        element.dataValues.user.firstName + element.dataValues.user.lastName;
+      let user = {
+        id: element.dataValues.user.id,
+        name: name,
+        email: element.dataValues.user.email,
+      };
+      users.push(user);
+    });
+    group.users = users;
+    resultData = {
+      group,
+    };
+  }
+  res.data = resultData;
+  next();
+};
+
 const addExpenseData = (req, res, next) => {
   let reciveData = res.data || {};
   let resultData = {};
@@ -47,5 +77,6 @@ const addExpenseData = (req, res, next) => {
 
 module.exports = {
   createGroupData,
+  addMemberData,
   addExpenseData,
 };

@@ -10,6 +10,14 @@ const createGroupSchema = async (req, res, next) => {
   validateRequest(req, res, next, schema, "body");
 };
 
+const addMemberSchema = async (req, res, next) => {
+  const schema = Joi.object({
+    groupId: Joi.string().required(),
+    member: Joi.array().items(Joi.string().guid()).required(),
+  });
+  validateRequest(req, res, next, schema, "body");
+};
+
 const addExpenseSchema = async (req, res, next) => {
   const schema = Joi.object({
     name: Joi.string().required(),

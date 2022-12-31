@@ -19,14 +19,15 @@ router.post(
 
 router.post(
   "/member",
-  checkAccessToken,
+    checkAccessToken,
   groupController.addMember,
+  groupSerializer.addMemberData,
   genericResponse.sendResponse
 );
 
 router.post(
   "/expense",
-  // checkAccessToken,
+  checkAccessToken,
   groupValidator.addExpenseSchema,
   groupController.addExpense,
   groupSerializer.addExpenseData,

@@ -39,12 +39,27 @@ const addMember = async (payload, userData) => {
     }
   };
 
-  member.forEach(async (element) => {
+  for (const element of member) {
     await addMemberInGroup(element);
+  }
+  //   addMemberInGroup(userData.id);
+  let groupDetail = await models.GroupUserMapping.findAll({
+    where: {
+      groupId: groupId,
+    },
+    include: [
+      {
+        model: models.Group,
+        as: "group",
+      },
+      {
+        model: models.User,
+        as: "user",
+      },
+    ],
   });
-  addMemberInGroup(userData.id);
-
-  return;
+  console.log(groupDetail);
+  return groupDetail;
 };
 
 const addExpense = async (payload) => {
@@ -72,7 +87,7 @@ const addExpense = async (payload) => {
     );
     if (splitType === "equally") {
       amountToPay = baseAmount / (member.length + 1);
-      member.forEach(async (element) => {
+      for (const element of member) {
         transaction = await models.Transaction.create(
           {
             expenseId: expense.dataValues.id,
@@ -82,7 +97,7 @@ const addExpense = async (payload) => {
           },
           { transaction: t }
         );
-      });
+      }
     } else if (splitType === "unequally") {
       let i = 0;
       for (const element of member) {
