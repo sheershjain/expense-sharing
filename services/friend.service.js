@@ -102,8 +102,8 @@ const addExpense = async (payload, userData) => {
       transaction,
     };
   } catch (error) {
-    throw new Error("Something went wrong");
     await t.rollback();
+    throw new Error("Something went wrong");
   }
 };
 

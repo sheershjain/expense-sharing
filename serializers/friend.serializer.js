@@ -43,55 +43,35 @@ const AllTransactionWithTargetUserData = (req, res, next) => {
   if (reciveData) {
     let borrowFromTargetUser = [];
     let lentToTargetUser = [];
-    reciveData.borrowFromTargetUser.forEach((element) => {
-      let parentObject = {
-        id: element.dataValues.id,
-        payeeId: element.dataValues.payeeId,
-        payerId: element.dataValues.payeeId,
-        amountToPay: element.dataValues.amountToPay,
-        isSettle: element.dataValues.isSettle,
-        expense: {
-          id: element.dataValues.expense.id,
-          name: element.dataValues.expense.name,
-          baseAmount: element.dataValues.expense.baseAmount,
-          splitType: element.dataValues.expense.splitType,
-        },
-      };
-      if (element.dataValues.expense.groupId) {
-        let group = {
-          id: element.dataValues.expense.group.id,
-          name: element.dataValues.expense.group.name,
-          category: element.dataValues.expense.group.category,
+    function serializeData(sourceArray, destinationArray) {
+      sourceArray.forEach((element) => {
+        let parentObject = {
+          id: element.dataValues.id,
+          payeeId: element.dataValues.payeeId,
+          payerId: element.dataValues.payeeId,
+          amountToPay: element.dataValues.amountToPay,
+          isSettle: element.dataValues.isSettle,
+          expense: {
+            id: element.dataValues.expense.id,
+            name: element.dataValues.expense.name,
+            baseAmount: element.dataValues.expense.baseAmount,
+            splitType: element.dataValues.expense.splitType,
+          },
         };
-        parentObject.expense.group = group;
-      }
-      borrowFromTargetUser.push(parentObject);
-    });
+        if (element.dataValues.expense.groupId) {
+          let group = {
+            id: element.dataValues.expense.group.id,
+            name: element.dataValues.expense.group.name,
+            category: element.dataValues.expense.group.category,
+          };
+          parentObject.expense.group = group;
+        }
+        destinationArray.push(parentObject);
+      });
+    }
+    serializeData(reciveData.borrowFromTargetUser, borrowFromTargetUser);
+    serializeData(reciveData.lentToTargetUser, lentToTargetUser);
 
-    reciveData.lentToTargetUser.forEach((element) => {
-      let parentObject = {
-        id: element.dataValues.id,
-        payeeId: element.dataValues.payeeId,
-        payerId: element.dataValues.payeeId,
-        amountToPay: element.dataValues.amountToPay,
-        isSettle: element.dataValues.isSettle,
-        expense: {
-          id: element.dataValues.expense.id,
-          name: element.dataValues.expense.name,
-          baseAmount: element.dataValues.expense.baseAmount,
-          splitType: element.dataValues.expense.splitType,
-        },
-      };
-      if (element.dataValues.expense.groupId) {
-        let group = {
-          id: element.dataValues.group.id,
-          name: element.dataValues.group.name,
-          category: element.dataValues.group.category,
-        };
-        parentObject.expense.group = group;
-      }
-      lentToTargetUser.push(parentObject);
-    });
     resultData = {
       borrowFromTargetUser,
       lentToTargetUser,
