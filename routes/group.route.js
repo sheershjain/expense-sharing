@@ -19,7 +19,8 @@ router.post(
 
 router.post(
   "/member",
-    checkAccessToken,
+  checkAccessToken,
+  groupValidator.addMemberSchema,
   groupController.addMember,
   groupSerializer.addMemberData,
   genericResponse.sendResponse
@@ -31,6 +32,13 @@ router.post(
   groupValidator.addExpenseSchema,
   groupController.addExpense,
   groupSerializer.addExpenseData,
+  genericResponse.sendResponse
+);
+
+router.get(
+  "/simplify-debt/:id",
+  groupValidator.simplifyDebtsSchema,
+  groupController.simplifyDebts,
   genericResponse.sendResponse
 );
 

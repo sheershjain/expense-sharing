@@ -31,7 +31,16 @@ const addExpenseSchema = async (req, res, next) => {
   validateRequest(req, res, next, schema, "body");
 };
 
+const simplifyDebtsSchema = async (req, res, next) => {
+  const schema = Joi.object({
+    id: Joi.string().guid().required(),
+  });
+  validateRequest(req, res, next, schema, "params");
+};
+
 module.exports = {
   createGroupSchema,
   addExpenseSchema,
+  simplifyDebtsSchema,
+  addMemberSchema,
 };

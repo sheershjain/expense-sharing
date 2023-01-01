@@ -40,8 +40,22 @@ const addExpense = async (req, res, next) => {
   }
 };
 
+const simplifyDebts = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await groupService.simplifyDebts(params);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createGroup,
   addMember,
   addExpense,
+  simplifyDebts,
 };
