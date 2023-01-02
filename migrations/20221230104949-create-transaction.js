@@ -33,13 +33,10 @@ module.exports = {
           key: "id",
         },
       },
+
       amount_to_pay: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: true,
-      },
-      is_settle: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
       },
       created_at: {
         allowNull: false,

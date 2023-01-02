@@ -50,7 +50,6 @@ const forgetPassword = async (req, res, next) => {
 
 const resetPassword = async (req, res, next) => {
   try {
-    console.log(req.params);
     const { body: payload } = req;
     const data = await userService.resetPassword(payload, req.params);
     res.data = data;

@@ -14,7 +14,7 @@ module.exports = {
         allowNull: false,
       },
       base_amount: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: true,
       },
       split_type: {

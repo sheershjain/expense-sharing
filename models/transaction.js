@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Expense, {
         foreignKey: "expense_id",
         targetKey: "id",
-        as: "expense"
-      })
+        as: "expense",
+      });
     }
   }
   Transaction.init(
@@ -52,12 +52,8 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       amountToPay: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.FLOAT,
         allowNull: true,
-      },
-      isSettle: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
       },
     },
     {
