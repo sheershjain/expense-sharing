@@ -59,4 +59,12 @@ router.delete(
   genericResponse.sendResponse
 );
 
+router.get(
+  "/",
+  checkAccessToken,
+  friendController.getAllFriend,
+  friendSerializer.getAllFriendData,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

@@ -259,6 +259,34 @@ const removeFriend = async (userData, params) => {
   return;
 };
 
+const getAllFriend = async (userData) => {
+  let currentUserId = userData.id;
+
+  let friend = await models.FriendList.findAll({
+    where: {
+      [Op.or]: [
+        {
+          friendOne: currentUserId,
+        },
+        {
+          friendTwo: currentUserId,
+        },
+      ],
+    },
+    include: [
+      {
+        model: models.User,
+        as: "friendOneData",
+      },
+      {
+        model: models.User,
+        as: "friendTwoData",
+      },
+    ],
+  });
+  return friend;
+};
+
 module.exports = {
   addFriend,
   addExpense,
@@ -266,4 +294,5 @@ module.exports = {
   overallExpenseOfCurrentUser,
   AllTransactionWithTargetUser,
   removeFriend,
+  getAllFriend,
 };

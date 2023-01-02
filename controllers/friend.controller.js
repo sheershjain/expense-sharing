@@ -75,6 +75,17 @@ const removeFriend = async (req, res, next) => {
   }
 };
 
+const getAllFriend = async (req, res, next) => {
+  try {
+    const data = await friendService.getAllFriend(req.user);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   addFriend,
   addExpense,
@@ -82,4 +93,5 @@ module.exports = {
   overallExpenseOfCurrentUser,
   AllTransactionWithTargetUser,
   removeFriend,
+  getAllFriend,
 };

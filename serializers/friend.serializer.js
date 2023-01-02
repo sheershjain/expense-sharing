@@ -81,8 +81,48 @@ const AllTransactionWithTargetUserData = (req, res, next) => {
   next();
 };
 
+const getAllFriendData = async (req, res, next) => {
+  let currentUserId = req.user.id;
+  let reciveData = res.data || {};
+  let resultData = {};
+  let friends = [];
+  let friend;
+  if (reciveData) {
+    reciveData.forEach((element) => {
+      if (element.dataValues.friendOneData.id === currentUserId) {
+        let name =
+          element.dataValues.friendTwoData.firstName +
+          " " +
+          element.dataValues.friendTwoData.lastName;
+        friend = {
+          id: element.dataValues.friendTwoData.id,
+          name: name,
+          email: element.dataValues.friendTwoData.email,
+        };
+      } else {
+        let name =
+          element.dataValues.friendOneData.firstName +
+          " " +
+          element.dataValues.friendOneData.lastName;
+        friend = {
+          id: element.dataValues.friendOneData.id,
+          name: name,
+          email: element.dataValues.friendOneData.email,
+        };
+      }
+      friends.push(friend);
+    });
+    resultData = {
+      friends,
+    };
+  }
+  res.data = resultData;
+  next();
+};
+
 module.exports = {
   addFriendData,
   addExpenseData,
   AllTransactionWithTargetUserData,
+  getAllFriendData,
 };
