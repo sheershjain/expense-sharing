@@ -13,7 +13,7 @@ const createGroupSchema = async (req, res, next) => {
 const addMemberSchema = async (req, res, next) => {
   const schema = Joi.object({
     groupId: Joi.string().required(),
-    member: Joi.array().items(Joi.string().guid()).required(),
+    groupMember: Joi.array().items(Joi.string().guid()).required(),
   });
   validateRequest(req, res, next, schema, "body");
 };

@@ -60,13 +60,52 @@ const getSimplifyDebts = (transactions) => {
   return new_edges;
 };
 
+const updateFriendList = async (friendList) => {
+  for (const friend of friendList) {
+    let friendOneId = friend[0];
+    let friendTwoId = friend[1];
+    let friendOne = await models.User.findOne({
+      where: { id: friendOneId },
+    });
+    if (!friendOne) throw new Error("User Not Found!");
+    let friendTwo = await models.User.findOne({
+      where: { id: friendTwoId },
+    });
+    if (!friendTwo) throw new Error("User Not Found!");
+
+    let existingRelation = await models.FriendList.findOne({
+      where: {
+        [Op.or]: [
+          {
+            [Op.and]: [{ friendOne: friendOneId }, { friendTwo: friendTwoId }],
+          },
+          {
+            [Op.and]: [{ friendOne: friendTwoId }, { friendTwo: friendOneId }],
+          },
+        ],
+      },
+    });
+
+    if (!existingRelation) {
+      let createRelation = await models.FriendList.create({
+        friendOne: friendOneId,
+        friendTwo: friendTwoId,
+      });
+    }
+  }
+  return;
+};
+
 const createGroup = async (payload) => {
   let groupCreate = await models.Group.create(payload);
   return groupCreate;
 };
 
 const addMember = async (payload, userData) => {
-  let { groupId, member } = payload;
+  let { groupId, groupMember } = payload;
+  groupMember.push(userData.id);
+  let friendCombinations = [];
+  let friendCombination = [];
 
   let existingGroup = await models.Group.findOne({
     where: {
@@ -75,6 +114,17 @@ const addMember = async (payload, userData) => {
   });
   if (!existingGroup) throw new Error("Group not found!");
 
+  let combinationUtil = async (groupMember, n) => {
+    for (let i = 0; i < n; i++) {
+      for (let j = i + 1; j < n; j++) {
+        friendCombinations.push([groupMember[i], groupMember[j]]);
+      }
+    }
+    return;
+  };
+
+  await combinationUtil(groupMember, groupMember.length);
+  await updateFriendList(friendCombinations);
   let addMemberInGroup = async (userId) => {
     let existingMapping = await models.GroupUserMapping.findOne({
       where: {
@@ -96,10 +146,9 @@ const addMember = async (payload, userData) => {
     }
   };
 
-  for (const element of member) {
-    await addMemberInGroup(element);
+  for (const member of groupMember) {
+    await addMemberInGroup(member);
   }
-  addMemberInGroup(userData.id);
   let groupDetail = await models.GroupUserMapping.findAll({
     where: {
       groupId: groupId,
@@ -115,9 +164,62 @@ const addMember = async (payload, userData) => {
       },
     ],
   });
-  console.log(groupDetail);
   return groupDetail;
 };
+
+// const addMember = async (payload, userData) => {
+//   let { groupId, member } = payload;
+
+//   let existingGroup = await models.Group.findOne({
+//     where: {
+//       id: groupId,
+//     },
+//   });
+//   if (!existingGroup) throw new Error("Group not found!");
+
+//   let addMemberInGroup = async (userId) => {
+//     let existingMapping = await models.GroupUserMapping.findOne({
+//       where: {
+//         [Op.and]: [
+//           {
+//             groupId: groupId,
+//           },
+//           {
+//             userId: userId,
+//           },
+//         ],
+//       },
+//     });
+//     if (!existingMapping) {
+//       await models.GroupUserMapping.create({
+//         groupId: groupId,
+//         userId: userId,
+//       });
+//     }
+//   };
+
+//   for (const element of member) {
+//     await addMemberInGroup(element);
+//   }
+//   addMemberInGroup(userData.id);
+//   let groupDetail = await models.GroupUserMapping.findAll({
+//     where: {
+//       groupId: groupId,
+//     },
+//     include: [
+//       {
+//         model: models.Group,
+//         as: "group",
+//       },
+//       {
+//         model: models.User,
+//         as: "user",
+//       },
+//     ],
+//   });
+//   console.log(groupDetail);
+//   return groupDetail;
+// };
 
 const addExpense = async (payload) => {
   let { groupId, baseAmount, splitType, payeeId, member, payerAmount } =

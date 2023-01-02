@@ -25,7 +25,7 @@ module.exports = {
           key: "id",
         },
       },
-      payerId: {
+      payer_id: {
         allowNull: false,
         type: Sequelize.UUID,
         references: {
@@ -33,7 +33,7 @@ module.exports = {
           key: "id",
         },
       },
-      amountToPay: {
+      amount_to_pay: {
         type: Sequelize.FLOAT,
         allowNull: true,
       },
