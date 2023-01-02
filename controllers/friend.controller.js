@@ -86,6 +86,18 @@ const getAllFriend = async (req, res, next) => {
   }
 };
 
+const expenseDetail = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await friendService.expenseDetail(params);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   addFriend,
   addExpense,
@@ -94,4 +106,5 @@ module.exports = {
   AllTransactionWithTargetUser,
   removeFriend,
   getAllFriend,
+  expenseDetail,
 };

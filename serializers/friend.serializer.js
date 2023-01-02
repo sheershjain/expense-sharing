@@ -120,9 +120,32 @@ const getAllFriendData = async (req, res, next) => {
   next();
 };
 
+const expenseDetailData = async (req, res, next) => {
+  let reciveData = res.data || {};
+  let resultData = {};
+
+  if (reciveData) {
+    resultData = {
+      id: reciveData.dataValues.id,
+      name: reciveData.dataValues.name,
+      baseAmount: reciveData.dataValues.baseAmount,
+      splitType: reciveData.dataValues.splitType,
+      transaction: {
+        id: reciveData.dataValues.transactions[0].id,
+        payeeId: reciveData.dataValues.transactions[0].payeeId,
+        payerId: reciveData.dataValues.transactions[0].payerId,
+        amountToPay: reciveData.dataValues.transactions[0].amountToPay,
+      },
+    };
+  }
+  res.data = resultData;
+  next();
+};
+
 module.exports = {
   addFriendData,
   addExpenseData,
   AllTransactionWithTargetUserData,
   getAllFriendData,
+  expenseDetailData,
 };

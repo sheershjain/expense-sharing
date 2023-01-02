@@ -67,4 +67,13 @@ router.get(
   genericResponse.sendResponse
 );
 
+router.get(
+  "/expense/:id",
+  checkAccessToken,
+  friendValidator.expenseDetailSchema,
+  friendController.expenseDetail,
+  friendSerializer.expenseDetailData,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

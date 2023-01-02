@@ -287,6 +287,22 @@ const getAllFriend = async (userData) => {
   return friend;
 };
 
+const expenseDetail = async (params) => {
+  let expenseId = params.id;
+
+  let existingExpenseId = await models.Expense.findOne({
+    where: { id: expenseId },
+    include: [
+      {
+        model: models.Transaction,
+        as: "transactions",
+      },
+    ],
+  });
+  if (!existingExpenseId) throw new Error("Expense Id not found");
+  return existingExpenseId;
+};
+
 module.exports = {
   addFriend,
   addExpense,
@@ -295,4 +311,5 @@ module.exports = {
   AllTransactionWithTargetUser,
   removeFriend,
   getAllFriend,
+  expenseDetail,
 };
