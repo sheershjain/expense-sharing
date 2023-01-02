@@ -135,6 +135,7 @@ const expenseDetailData = async (req, res, next) => {
         payeeId: reciveData.dataValues.transactions[0].payeeId,
         payerId: reciveData.dataValues.transactions[0].payerId,
         amountToPay: reciveData.dataValues.transactions[0].amountToPay,
+        isSettle: reciveData.dataValues.transactions[0].isSettle,
       },
     };
   }

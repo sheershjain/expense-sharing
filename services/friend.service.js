@@ -72,6 +72,7 @@ const addExpense = async (payload, userData) => {
   } else if (splitType === "equally") {
     amountToPay = baseAmount / 2;
   } else {
+    if (!(baseAmount > payerAmount)) throw new Error("Invalid values");
     amountToPay = payerAmount;
   }
   let transaction, expense;
@@ -82,7 +83,6 @@ const addExpense = async (payload, userData) => {
         name: payload.name,
         baseAmount: payload.baseAmount,
         splitType: payload.splitType,
-        groupId: payload.groupId || null,
       },
       { transaction: t }
     );
@@ -303,6 +303,77 @@ const expenseDetail = async (params) => {
   return existingExpenseId;
 };
 
+const updateExpense = async (payload, params) => {
+  console.log("after query");
+  let expenseId = params.id;
+  console.log("after query");
+  let existingExpenseId = await models.Expense.findOne({
+    where: { id: expenseId },
+    include: [
+      {
+        model: models.Transaction,
+        as: "transactions",
+      },
+    ],
+  });
+  if (!existingExpenseId) throw new Error("Expense Id not found");
+  console.log("after query");
+  let name = payload.name || existingExpenseId.dataValues.name;
+  let baseAmount =
+    payload.baseAmount || existingExpenseId.dataValues.baseAmount;
+  let splitType = payload.splitType || existingExpenseId.dataValues.splitType;
+  let payeeId =
+    payload.payeeId || existingExpenseId.dataValues.transactions[0].payeeId;
+  let payerId =
+    payload.payerId || existingExpenseId.dataValues.transactions[0].payerId;
+  let amountToPay =
+    payload.amountToPay ||
+    existingExpenseId.dataValues.transactions[0].amountToPay;
+
+  if (splitType === "exactly") {
+    amountToPay = baseAmount;
+  } else if (splitType === "equally") {
+    amountToPay = baseAmount / 2;
+  } else {
+    if (!(baseAmount > payerAmount)) throw new Error("Invalid values");
+    amountToPay = payerAmount;
+  }
+  let transaction, expense;
+  const t = await sequelize.transaction();
+  try {
+    expense = await models.Expense.update(
+      {
+        name: name,
+        baseAmount: baseAmount,
+        splitType: splitType,
+      },
+      {
+        where: {
+          id: expenseId,
+        },
+      },
+      { transaction: t }
+    );
+    transaction = await models.Transaction.update(
+      {
+        expenseId: expenseId,
+        payeeId: payeeId,
+        payerId: payerId,
+        amountToPay: amountToPay,
+      },
+      { where: { id: existingExpenseId.dataValues.transactions[0].id } },
+      { transaction: t }
+    );
+
+    await t.commit();
+
+    return expenseDetail({ id: expenseId });
+  } catch (error) {
+    await t.rollback();
+    throw new Error("Something went wrong");
+  }
+};
+
 module.exports = {
   addFriend,
   addExpense,
@@ -312,4 +383,5 @@ module.exports = {
   removeFriend,
   getAllFriend,
   expenseDetail,
+  updateExpense,
 };

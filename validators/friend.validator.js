@@ -29,7 +29,7 @@ const targetUserIdCheck = async (req, res, next) => {
   validateRequest(req, res, next, schema, "params");
 };
 
-const expenseDetailSchema = async (req, res, next) => {
+const expenseIdCheck = async (req, res, next) => {
   const schema = Joi.object({
     id: Joi.string().guid().required(),
   });
@@ -40,5 +40,5 @@ module.exports = {
   addFriendSchema,
   addExpenseSchema,
   targetUserIdCheck,
-  expenseDetailSchema,
+  expenseIdCheck,
 };

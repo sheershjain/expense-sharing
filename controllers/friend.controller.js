@@ -98,6 +98,19 @@ const expenseDetail = async (req, res, next) => {
   }
 };
 
+const updateExpense = async (req, res, next) => {
+  try {
+    const { body: payload } = req;
+    const { params } = req;
+    const data = await friendService.updateExpense(payload, params);
+    res.data = data;
+    next();
+  } catch (error) {
+    // console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   addFriend,
   addExpense,
@@ -107,4 +120,5 @@ module.exports = {
   removeFriend,
   getAllFriend,
   expenseDetail,
+  updateExpense,
 };

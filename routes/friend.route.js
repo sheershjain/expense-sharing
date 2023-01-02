@@ -70,8 +70,17 @@ router.get(
 router.get(
   "/expense/:id",
   checkAccessToken,
-  friendValidator.expenseDetailSchema,
+  friendValidator.expenseIdCheck,
   friendController.expenseDetail,
+  friendSerializer.expenseDetailData,
+  genericResponse.sendResponse
+);
+
+router.patch(
+  "/expense/:id",
+  //   checkAccessToken,
+  //   friendValidator.expenseIdCheck,
+  friendController.updateExpense,
   friendSerializer.expenseDetailData,
   genericResponse.sendResponse
 );
