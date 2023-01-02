@@ -37,10 +37,6 @@ module.exports = {
         type: Sequelize.FLOAT,
         allowNull: true,
       },
-      is_settle: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
       created_at: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -236,9 +236,6 @@ const removeFriend = async (userData, params) => {
             },
           ],
         },
-        {
-          isSettle: false,
-        },
       ],
     },
   });

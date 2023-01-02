@@ -27,7 +27,6 @@ const addExpenseData = (req, res, next) => {
           payeeId: reciveData.transaction.dataValues.payeeId,
           payerId: reciveData.transaction.dataValues.payerId,
           amountToPay: reciveData.transaction.dataValues.amountToPay,
-          isSettle: reciveData.transaction.dataValues.isSettle,
         },
       },
     };
@@ -50,7 +49,6 @@ const AllTransactionWithTargetUserData = (req, res, next) => {
           payeeId: element.dataValues.payeeId,
           payerId: element.dataValues.payeeId,
           amountToPay: element.dataValues.amountToPay,
-          isSettle: element.dataValues.isSettle,
           expense: {
             id: element.dataValues.expense.id,
             name: element.dataValues.expense.name,
@@ -135,7 +133,6 @@ const expenseDetailData = async (req, res, next) => {
         payeeId: reciveData.dataValues.transactions[0].payeeId,
         payerId: reciveData.dataValues.transactions[0].payerId,
         amountToPay: reciveData.dataValues.transactions[0].amountToPay,
-        isSettle: reciveData.dataValues.transactions[0].isSettle,
       },
     };
   }
