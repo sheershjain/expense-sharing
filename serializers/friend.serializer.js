@@ -27,7 +27,6 @@ const addExpenseData = (req, res, next) => {
           payeeId: reciveData.transaction.dataValues.payeeId,
           payerId: reciveData.transaction.dataValues.payerId,
           amountToPay: reciveData.transaction.dataValues.amountToPay,
-          isSettle: reciveData.transaction.dataValues.isSettle,
         },
       },
     };
@@ -50,7 +49,6 @@ const AllTransactionWithTargetUserData = (req, res, next) => {
           payeeId: element.dataValues.payeeId,
           payerId: element.dataValues.payeeId,
           amountToPay: element.dataValues.amountToPay,
-          isSettle: element.dataValues.isSettle,
           expense: {
             id: element.dataValues.expense.id,
             name: element.dataValues.expense.name,
@@ -81,8 +79,71 @@ const AllTransactionWithTargetUserData = (req, res, next) => {
   next();
 };
 
+const getAllFriendData = async (req, res, next) => {
+  let currentUserId = req.user.id;
+  let reciveData = res.data || {};
+  let resultData = {};
+  let friends = [];
+  let friend;
+  if (reciveData) {
+    reciveData.forEach((element) => {
+      if (element.dataValues.friendOneData.id === currentUserId) {
+        let name =
+          element.dataValues.friendTwoData.firstName +
+          " " +
+          element.dataValues.friendTwoData.lastName;
+        friend = {
+          id: element.dataValues.friendTwoData.id,
+          name: name,
+          email: element.dataValues.friendTwoData.email,
+        };
+      } else {
+        let name =
+          element.dataValues.friendOneData.firstName +
+          " " +
+          element.dataValues.friendOneData.lastName;
+        friend = {
+          id: element.dataValues.friendOneData.id,
+          name: name,
+          email: element.dataValues.friendOneData.email,
+        };
+      }
+      friends.push(friend);
+    });
+    resultData = {
+      friends,
+    };
+  }
+  res.data = resultData;
+  next();
+};
+
+const expenseDetailData = async (req, res, next) => {
+  let reciveData = res.data || {};
+  let resultData = {};
+
+  if (reciveData) {
+    resultData = {
+      id: reciveData.dataValues.id,
+      name: reciveData.dataValues.name,
+      baseAmount: reciveData.dataValues.baseAmount,
+      splitType: reciveData.dataValues.splitType,
+      transaction: {
+        id: reciveData.dataValues.transactions[0].id,
+        payeeId: reciveData.dataValues.transactions[0].payeeId,
+        payerId: reciveData.dataValues.transactions[0].payerId,
+        amountToPay: reciveData.dataValues.transactions[0].amountToPay,
+      },
+    };
+  }
+  res.data = resultData;
+  next();
+};
+
 module.exports = {
   addFriendData,
   addExpenseData,
   AllTransactionWithTargetUserData,
+  getAllFriendData,
+  expenseDetailData,
 };

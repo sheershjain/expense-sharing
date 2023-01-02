@@ -63,10 +63,74 @@ const AllTransactionWithTargetUser = async (req, res, next) => {
   }
 };
 
+const removeFriend = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await friendService.removeFriend(req.user, params);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
+const getAllFriend = async (req, res, next) => {
+  try {
+    const data = await friendService.getAllFriend(req.user);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
+const expenseDetail = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await friendService.expenseDetail(params);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
+const updateExpense = async (req, res, next) => {
+  try {
+    const { body: payload } = req;
+    const { params } = req;
+    const data = await friendService.updateExpense(payload, params);
+    res.data = data;
+    next();
+  } catch (error) {
+    // console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
+const settleTransaction = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await friendService.settleTransaction(params);
+    res.data = data;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   addFriend,
   addExpense,
   simplifyDebts,
   overallExpenseOfCurrentUser,
   AllTransactionWithTargetUser,
+  removeFriend,
+  getAllFriend,
+  expenseDetail,
+  updateExpense,
+  settleTransaction,
 };

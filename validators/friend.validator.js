@@ -21,7 +21,7 @@ const addExpenseSchema = async (req, res, next) => {
   validateRequest(req, res, next, schema, "body");
 };
 
-const targetUserIdCheck = async (req, res, next) => {
+const paramsIdCheck = async (req, res, next) => {
   const schema = Joi.object({
     id: Joi.string().guid().required(),
   });
@@ -31,5 +31,5 @@ const targetUserIdCheck = async (req, res, next) => {
 module.exports = {
   addFriendSchema,
   addExpenseSchema,
-  targetUserIdCheck,
+  paramsIdCheck,
 };

@@ -29,8 +29,7 @@ router.post(
 router.get(
   "/simplify-debts/:id",
   checkAccessToken,
-  friendValidator.targetUserIdCheck,
-  friendController.simplifyDebts,
+  friendValidator.paramsIdCheck,
   friendController.simplifyDebts,
   genericResponse.sendResponse
 );
@@ -45,9 +44,50 @@ router.get(
 router.get(
   "/transactions/:id",
   checkAccessToken,
-  friendValidator.targetUserIdCheck,
+  friendValidator.paramsIdCheck,
   friendController.AllTransactionWithTargetUser,
   friendSerializer.AllTransactionWithTargetUserData,
+  genericResponse.sendResponse
+);
+
+router.delete(
+  "/remove/:id",
+  checkAccessToken,
+  friendValidator.paramsIdCheck,
+  friendController.removeFriend,
+  genericResponse.sendResponse
+);
+
+router.get(
+  "/",
+  checkAccessToken,
+  friendController.getAllFriend,
+  friendSerializer.getAllFriendData,
+  genericResponse.sendResponse
+);
+
+router.get(
+  "/expense/:id",
+  checkAccessToken,
+  friendValidator.paramsIdCheck,
+  friendController.expenseDetail,
+  friendSerializer.expenseDetailData,
+  genericResponse.sendResponse
+);
+
+router.patch(
+  "/expense/:id",
+  checkAccessToken,
+  friendValidator.paramsIdCheck,
+  friendController.updateExpense,
+  friendSerializer.expenseDetailData,
+  genericResponse.sendResponse
+);
+
+router.delete(
+  "/expense/:id",
+  friendValidator.paramsIdCheck,
+  friendController.settleTransaction,
   genericResponse.sendResponse
 );
 

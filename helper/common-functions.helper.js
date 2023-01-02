@@ -1,3 +1,5 @@
+const _ = require("lodash");
+
 const { commonErrorHandler } = require("./error-handler.helper");
 
 const validateRequest = (req, res, next, schema, requestParamterType) => {
@@ -24,7 +26,11 @@ const validateRequest = (req, res, next, schema, requestParamterType) => {
   }
 
   const { details } = error;
-  const message = details.map((i) => i.message).join(",");
+
+  //to make "password" -> password
+  const message = details
+    .map((i) => i.message.replace(/("([a-z]*)")/gm, "$2"))
+    .join(",");
   return commonErrorHandler(req, res, message, 422);
 };
 

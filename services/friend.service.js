@@ -72,6 +72,7 @@ const addExpense = async (payload, userData) => {
   } else if (splitType === "equally") {
     amountToPay = baseAmount / 2;
   } else {
+    if (!(baseAmount > payerAmount)) throw new Error("Invalid values");
     amountToPay = payerAmount;
   }
   let transaction, expense;
@@ -82,7 +83,6 @@ const addExpense = async (payload, userData) => {
         name: payload.name,
         baseAmount: payload.baseAmount,
         splitType: payload.splitType,
-        groupId: payload.groupId || null,
       },
       { transaction: t }
     );
@@ -108,16 +108,16 @@ const addExpense = async (payload, userData) => {
 };
 
 const simplifyDebts = async (userData, params) => {
-  let targetUser = params.id;
-  let currentUser = userData.id;
+  let targetUserId = params.id;
+  let currentUserId = userData.id;
 
   let targetUserData = await models.Transaction.findAll({
     attributes: [
       [Sequelize.fn("sum", Sequelize.col("amount_to_pay")), "targetUserAmount"],
     ],
     where: {
-      payeeId: currentUser,
-      payerId: targetUser,
+      payeeId: currentUserId,
+      payerId: targetUserId,
     },
   });
   let currentUserData = await models.Transaction.findAll({
@@ -128,8 +128,8 @@ const simplifyDebts = async (userData, params) => {
       ],
     ],
     where: {
-      payeeId: targetUser,
-      payerId: currentUser,
+      payeeId: targetUserId,
+      payerId: currentUserId,
     },
   });
   let amountDifference =
@@ -214,10 +214,202 @@ const AllTransactionWithTargetUser = async (userData, params) => {
   };
 };
 
+const removeFriend = async (userData, params) => {
+  let currentUserId = userData.id;
+  let targetUserId = params.id;
+
+  let targetUserData = await models.User.findOne({
+    where: { id: targetUserId },
+  });
+  if (!targetUserData) throw new Error("User Not Found!");
+
+  let pendingTransaction = await models.Transaction.findOne({
+    where: {
+      [Op.and]: [
+        {
+          [Op.or]: [
+            {
+              [Op.and]: [{ payeeId: currentUserId }, { payerId: targetUserId }],
+            },
+            {
+              [Op.and]: [{ payeeId: targetUserId }, { payerId: currentUserId }],
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  if (pendingTransaction) throw new Error("Settle up the pending tranactions");
+  await models.FriendList.destroy({
+    where: {
+      [Op.or]: [
+        {
+          [Op.and]: [{ friendOne: currentUserId }, { friendTwo: targetUserId }],
+        },
+        {
+          [Op.and]: [{ friendOne: targetUserId }, { friendTwo: currentUserId }],
+        },
+      ],
+    },
+  });
+  return;
+};
+
+const getAllFriend = async (userData) => {
+  let currentUserId = userData.id;
+
+  let friend = await models.FriendList.findAll({
+    where: {
+      [Op.or]: [
+        {
+          friendOne: currentUserId,
+        },
+        {
+          friendTwo: currentUserId,
+        },
+      ],
+    },
+    include: [
+      {
+        model: models.User,
+        as: "friendOneData",
+      },
+      {
+        model: models.User,
+        as: "friendTwoData",
+      },
+    ],
+  });
+  return friend;
+};
+
+const expenseDetail = async (params) => {
+  let expenseId = params.id;
+
+  let existingExpenseId = await models.Expense.findOne({
+    where: { id: expenseId },
+    include: [
+      {
+        model: models.Transaction,
+        as: "transactions",
+      },
+    ],
+  });
+  if (!existingExpenseId) throw new Error("Expense Id not found");
+  return existingExpenseId;
+};
+
+const updateExpense = async (payload, params) => {
+  console.log("after query");
+  let expenseId = params.id;
+  console.log("after query");
+  let existingExpenseId = await models.Expense.findOne({
+    where: { id: expenseId },
+    include: [
+      {
+        model: models.Transaction,
+        as: "transactions",
+      },
+    ],
+  });
+  if (!existingExpenseId) throw new Error("Expense Id not found");
+  console.log("after query");
+  let name = payload.name || existingExpenseId.dataValues.name;
+  let baseAmount =
+    payload.baseAmount || existingExpenseId.dataValues.baseAmount;
+  let splitType = payload.splitType || existingExpenseId.dataValues.splitType;
+  let payeeId =
+    payload.payeeId || existingExpenseId.dataValues.transactions[0].payeeId;
+  let payerId =
+    payload.payerId || existingExpenseId.dataValues.transactions[0].payerId;
+  let amountToPay =
+    payload.amountToPay ||
+    existingExpenseId.dataValues.transactions[0].amountToPay;
+
+  if (splitType === "exactly") {
+    amountToPay = baseAmount;
+  } else if (splitType === "equally") {
+    amountToPay = baseAmount / 2;
+  } else {
+    if (!(baseAmount > payerAmount)) throw new Error("Invalid values");
+    amountToPay = payerAmount;
+  }
+  let transaction, expense;
+  const t = await sequelize.transaction();
+  try {
+    expense = await models.Expense.update(
+      {
+        name: name,
+        baseAmount: baseAmount,
+        splitType: splitType,
+      },
+      {
+        where: {
+          id: expenseId,
+        },
+      },
+      { transaction: t }
+    );
+    transaction = await models.Transaction.update(
+      {
+        expenseId: expenseId,
+        payeeId: payeeId,
+        payerId: payerId,
+        amountToPay: amountToPay,
+      },
+      { where: { id: existingExpenseId.dataValues.transactions[0].id } },
+      { transaction: t }
+    );
+
+    await t.commit();
+
+    return expenseDetail({ id: expenseId });
+  } catch (error) {
+    await t.rollback();
+    throw new Error("Something went wrong");
+  }
+};
+
+const settleTransaction = async (params) => {
+  let transactionId = params.id;
+
+  let existingTransaction = await models.Transaction.findOne({
+    where: {
+      id: transactionId,
+    },
+    include: [
+      {
+        model: models.Expense,
+        as: "expense",
+      },
+    ],
+  });
+  if (!existingTransaction) throw new Error("Treansaction not found");
+  if (existingTransaction.dataValues.expense.groupId)
+    throw new Error("Invalid Opration");
+  await models.Transaction.destroy({
+    where: {
+      id: transactionId,
+    },
+  });
+  await models.Expense.destroy({
+    where: {
+      id: existingTransaction.dataValues.expense.id,
+    },
+  });
+  return;
+};
+
 module.exports = {
   addFriend,
   addExpense,
   simplifyDebts,
   overallExpenseOfCurrentUser,
   AllTransactionWithTargetUser,
+  removeFriend,
+  getAllFriend,
+  expenseDetail,
+  updateExpense,
+  settleTransaction,
 };

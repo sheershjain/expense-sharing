@@ -55,10 +55,6 @@ module.exports = (sequelize, DataTypes) => {
         type: Sequelize.FLOAT,
         allowNull: true,
       },
-      isSettle: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: false,
-      },
     },
     {
       sequelize,
