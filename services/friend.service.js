@@ -108,16 +108,16 @@ const addExpense = async (payload, userData) => {
 };
 
 const simplifyDebts = async (userData, params) => {
-  let targetUser = params.id;
-  let currentUser = userData.id;
+  let targetUserId = params.id;
+  let currentUserId = userData.id;
 
   let targetUserData = await models.Transaction.findAll({
     attributes: [
       [Sequelize.fn("sum", Sequelize.col("amount_to_pay")), "targetUserAmount"],
     ],
     where: {
-      payeeId: currentUser,
-      payerId: targetUser,
+      payeeId: currentUserId,
+      payerId: targetUserId,
     },
   });
   let currentUserData = await models.Transaction.findAll({
@@ -128,8 +128,8 @@ const simplifyDebts = async (userData, params) => {
       ],
     ],
     where: {
-      payeeId: targetUser,
-      payerId: currentUser,
+      payeeId: targetUserId,
+      payerId: currentUserId,
     },
   });
   let amountDifference =
