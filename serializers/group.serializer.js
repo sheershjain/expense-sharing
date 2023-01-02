@@ -1,3 +1,5 @@
+const expense = require("../models/expense");
+
 const createGroupData = (req, res, next) => {
   let reciveData = res.data || {};
   let resultData = {};
@@ -75,8 +77,37 @@ const addExpenseData = (req, res, next) => {
   next();
 };
 
+const expenseDetailData = (req, res, next) => {
+  let reciveData = res.data || {};
+  let resultData = {};
+  let transactions = [];
+  if (reciveData) {
+    let expense = {
+      id: reciveData.dataValues.id,
+      name: reciveData.dataValues.name,
+      baseAmount: reciveData.dataValues.baseAmount,
+      splitType: reciveData.dataValues.splitType,
+    };
+    reciveData.dataValues.transactions.forEach((transaction) => {
+      transactions.push({
+        id: transaction.id,
+        payeeId: transaction.payeeId,
+        payerId: transaction.payerId,
+        amountToPay: transaction.amountToPay,
+      });
+    });
+    expense.transactions = transactions;
+    resultData = {
+      expense,
+    };
+  }
+  res.data = resultData;
+  next();
+};
+
 module.exports = {
   createGroupData,
   addMemberData,
   addExpenseData,
+  expenseDetailData,
 };

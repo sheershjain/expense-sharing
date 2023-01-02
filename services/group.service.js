@@ -167,60 +167,6 @@ const addMember = async (payload, userData) => {
   return groupDetail;
 };
 
-// const addMember = async (payload, userData) => {
-//   let { groupId, member } = payload;
-
-//   let existingGroup = await models.Group.findOne({
-//     where: {
-//       id: groupId,
-//     },
-//   });
-//   if (!existingGroup) throw new Error("Group not found!");
-
-//   let addMemberInGroup = async (userId) => {
-//     let existingMapping = await models.GroupUserMapping.findOne({
-//       where: {
-//         [Op.and]: [
-//           {
-//             groupId: groupId,
-//           },
-//           {
-//             userId: userId,
-//           },
-//         ],
-//       },
-//     });
-//     if (!existingMapping) {
-//       await models.GroupUserMapping.create({
-//         groupId: groupId,
-//         userId: userId,
-//       });
-//     }
-//   };
-
-//   for (const element of member) {
-//     await addMemberInGroup(element);
-//   }
-//   addMemberInGroup(userData.id);
-//   let groupDetail = await models.GroupUserMapping.findAll({
-//     where: {
-//       groupId: groupId,
-//     },
-//     include: [
-//       {
-//         model: models.Group,
-//         as: "group",
-//       },
-//       {
-//         model: models.User,
-//         as: "user",
-//       },
-//     ],
-//   });
-//   console.log(groupDetail);
-//   return groupDetail;
-// };
-
 const addExpense = async (payload) => {
   let { groupId, baseAmount, splitType, payeeId, member, payerAmount } =
     payload;
@@ -256,6 +202,7 @@ const addExpense = async (payload) => {
           },
           { transaction: t }
         );
+        transactions.push(transaction);
       }
     } else if (splitType === "unequally") {
       let i = 0;
@@ -274,6 +221,7 @@ const addExpense = async (payload) => {
       }
     }
     await t.commit();
+    console.log(expense, transactions);
     return {
       expense,
       transactions,
@@ -319,9 +267,27 @@ const simplifyDebts = async (params) => {
   return result;
 };
 
+const expenseDetail = async (params) => {
+  let expenseId = params.id;
+
+  let existingExpenseId = await models.Expense.findOne({
+    where: { id: expenseId },
+    include: [
+      {
+        model: models.Transaction,
+        as: "transactions",
+      },
+    ],
+  });
+  if (!existingExpenseId || !existingExpenseId.dataValues.transactions)
+    throw new Error("Expense Id not found");
+  return existingExpenseId;
+};
+
 module.exports = {
   createGroup,
   addMember,
   addExpense,
   simplifyDebts,
+  expenseDetail,
 };

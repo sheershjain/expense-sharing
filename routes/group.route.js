@@ -42,4 +42,13 @@ router.get(
   genericResponse.sendResponse
 );
 
+router.get(
+  "/expense/:id",
+  checkAccessToken,
+  groupValidator.paramsIdCheck,
+  groupController.expenseDetail,
+  groupSerializer.expenseDetailData,
+  genericResponse.sendResponse
+);
+
 module.exports = router;
