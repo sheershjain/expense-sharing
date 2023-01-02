@@ -9,13 +9,13 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
-      name: {
-        type: Sequelize.STRING,
+      expense_id: {
         allowNull: false,
-      },
-      base_amount: {
-        type: Sequelize.FLOAT,
-        allowNull: true,
+        type: Sequelize.UUID,
+        references: {
+          model: "expense",
+          key: "id",
+        },
       },
       payee_id: {
         allowNull: false,
@@ -34,20 +34,8 @@ module.exports = {
         },
       },
       amount_to_pay: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.INTEGER,
         allowNull: true,
-      },
-      split_type: {
-        type: Sequelize.ENUM,
-        values: ["equally", "unequally", "exactly"],
-      },
-      group_id: {
-        allowNull: true,
-        type: Sequelize.UUID,
-        references: {
-          model: "group",
-          key: "id",
-        },
       },
       is_settle: {
         type: Sequelize.BOOLEAN,

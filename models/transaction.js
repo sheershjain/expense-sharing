@@ -18,22 +18,22 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
         as: "payerUser",
       });
-      this.belongsTo(models.Group, {
-        foreignKey: "group_id",
+      this.belongsTo(models.Expense, {
+        foreignKey: "expense_id",
         targetKey: "id",
-        as: "groups",
-      });
+        as: "expense"
+      })
     }
   }
   Transaction.init(
     {
-      name: {
-        type: Sequelize.STRING,
+      expenseId: {
         allowNull: false,
-      },
-      baseAmount: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
+        type: Sequelize.UUID,
+        references: {
+          model: "expense",
+          key: "id",
+        },
       },
       payeeId: {
         allowNull: false,
@@ -54,18 +54,6 @@ module.exports = (sequelize, DataTypes) => {
       amountToPay: {
         type: Sequelize.INTEGER,
         allowNull: true,
-      },
-      splitType: {
-        type: Sequelize.ENUM,
-        values: ["equally", "unequally", "exactly"],
-      },
-      groupId: {
-        allowNull: true,
-        type: Sequelize.UUID,
-        references: {
-          model: "group",
-          key: "id",
-        },
       },
       isSettle: {
         type: Sequelize.BOOLEAN,
