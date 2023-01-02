@@ -78,10 +78,16 @@ router.get(
 
 router.patch(
   "/expense/:id",
-  //   checkAccessToken,
-  //   friendValidator.expenseIdCheck,
+  checkAccessToken,
+  friendValidator.expenseIdCheck,
   friendController.updateExpense,
   friendSerializer.expenseDetailData,
+  genericResponse.sendResponse
+);
+
+router.delete(
+  "/expense/:id",
+  friendController.settleTransaction,
   genericResponse.sendResponse
 );
 

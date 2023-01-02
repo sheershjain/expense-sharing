@@ -111,6 +111,17 @@ const updateExpense = async (req, res, next) => {
   }
 };
 
+const settleTransaction = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await friendService.settleTransaction(params);
+    res.data = data;
+    next();
+  } catch (error) {
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   addFriend,
   addExpense,
@@ -121,4 +132,5 @@ module.exports = {
   getAllFriend,
   expenseDetail,
   updateExpense,
+  settleTransaction,
 };

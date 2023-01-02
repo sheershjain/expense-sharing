@@ -374,6 +374,36 @@ const updateExpense = async (payload, params) => {
   }
 };
 
+const settleTransaction = async (params) => {
+  let transactionId = params.id;
+
+  let existingTransaction = await models.Transaction.findOne({
+    where: {
+      id: transactionId,
+    },
+    include: [
+      {
+        model: models.Expense,
+        as: "expense",
+      },
+    ],
+  });
+  if (!existingTransaction) throw new Error("Treansaction not found");
+  if (existingTransaction.dataValues.expense.groupId)
+    throw new Error("Invalid Opration");
+  await models.Transaction.destroy({
+    where: {
+      id: transactionId,
+    },
+  });
+  await models.Expense.destroy({
+    where: {
+      id: existingTransaction.dataValues.expense.id,
+    },
+  });
+  return;
+};
+
 module.exports = {
   addFriend,
   addExpense,
@@ -384,4 +414,5 @@ module.exports = {
   getAllFriend,
   expenseDetail,
   updateExpense,
+  settleTransaction,
 };
