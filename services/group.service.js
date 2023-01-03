@@ -317,6 +317,50 @@ const allGroupOfCurrentUser = async (userData) => {
   return groups;
 };
 
+const leaveGroup = async (userData, params) => {
+  let currentUserId = userData.id;
+  let groupId = params.id;
+  let existingGroup = await models.Group.findOne({
+    where: {
+      id: groupId,
+    },
+  });
+  if (!existingGroup) throw new Error("Group not found!");
+
+  let pendingTransaction = await models.Expense.findAll({
+    where: {
+      groupId: groupId,
+    },
+    include: [
+      {
+        model: models.Transaction,
+        as: "transactions",
+        where: {
+          [Op.or]: [
+            {
+              payeeId: currentUserId,
+            },
+            {
+              payerId: currentUserId,
+            },
+          ],
+        },
+      },
+    ],
+  });
+
+  for (const expense of pendingTransaction) {
+    if (expense.dataValues.transactions) throw new Error("Pending transactions");
+  }
+
+  await models.GroupUserMapping.destroy({
+    where: {
+      [Op.and]: [{ groupId: groupId }, { userId: currentUserId }],
+    },
+  });
+  return;
+};
+
 module.exports = {
   createGroup,
   addMember,
@@ -325,4 +369,5 @@ module.exports = {
   expenseDetail,
   groupExpenses,
   allGroupOfCurrentUser,
+  leaveGroup,
 };

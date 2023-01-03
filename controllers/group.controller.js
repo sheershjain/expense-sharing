@@ -88,6 +88,18 @@ const allGroupOfCurrentUser = async (req, res, next) => {
   }
 };
 
+const leaveGroup = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await groupService.leaveGroup(req.user, params);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createGroup,
   addMember,
@@ -95,5 +107,6 @@ module.exports = {
   simplifyDebts,
   expenseDetail,
   groupExpenses,
-  allGroupOfCurrentUser,
+    allGroupOfCurrentUser,
+  leaveGroup
 };

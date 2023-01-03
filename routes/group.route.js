@@ -68,4 +68,12 @@ router.get(
   genericResponse.sendResponse
 );
 
+router.post(
+  "/leave/:id",
+  checkAccessToken,
+  groupValidator.paramsIdCheck,
+  groupController.leaveGroup,
+  genericResponse.sendResponse
+);
+
 module.exports = router;
