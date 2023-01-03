@@ -506,6 +506,39 @@ const overallExpenseOfCurrentUserAtGroup = async (userData, params) => {
   };
 };
 
+const settleTransaction = async (params) => {
+  let { groupId, expenseId, transactionId } = params;
+
+  let existingTransaction = await models.Transaction.findOne({
+    where: {
+      id: transactionId,
+    },
+    include: [
+      {
+        model: models.Expense,
+        as: "expense",
+        where: { id: expenseId },
+        include: [
+          {
+            model: models.Group,
+            as: "group",
+            where: { id: groupId },
+          },
+        ],
+      },
+    ],
+  });
+  if (!existingTransaction) throw new Error("Treansaction not found");
+  
+  await models.Transaction.destroy({
+    where: {
+      id: transactionId,
+    },
+  });
+  
+  return;
+};
+
 module.exports = {
   createGroup,
   addMember,
@@ -518,4 +551,5 @@ module.exports = {
   deleteGroup,
   overallExpenseOfCurrentUserAtGroups,
   overallExpenseOfCurrentUserAtGroup,
+  settleTransaction,
 };

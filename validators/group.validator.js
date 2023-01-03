@@ -45,10 +45,20 @@ const paramsIdCheck = async (req, res, next) => {
   validateRequest(req, res, next, schema, "params");
 };
 
+const settleTransactionValidate = async (req, res, next) => {
+  const schema = Joi.object({
+    groupId: Joi.string().guid().required(),
+    expenseId: Joi.string().guid().required(),
+    transactionId: Joi.string().guid().required(),
+  });
+  validateRequest(req, res, next, schema, "params");
+};
+
 module.exports = {
   createGroupSchema,
   addExpenseSchema,
   simplifyDebtsSchema,
   addMemberSchema,
-  paramsIdCheck,
+    paramsIdCheck,
+  settleTransactionValidate
 };

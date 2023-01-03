@@ -128,11 +128,25 @@ const overallExpenseOfCurrentUserAtGroups = async (req, res, next) => {
 const overallExpenseOfCurrentUserAtGroup = async (req, res, next) => {
   try {
     const { params } = req;
-    const data = await groupService.overallExpenseOfCurrentUserAtGroup(req.user, params);
+    const data = await groupService.overallExpenseOfCurrentUserAtGroup(
+      req.user,
+      params
+    );
     res.data = data;
     next();
   } catch (error) {
     console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
+const settleTransaction = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await groupService.settleTransaction(params);
+    res.data = data;
+    next();
+  } catch (error) {
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -149,4 +163,5 @@ module.exports = {
   deleteGroup,
   overallExpenseOfCurrentUserAtGroups,
   overallExpenseOfCurrentUserAtGroup,
+  settleTransaction,
 };

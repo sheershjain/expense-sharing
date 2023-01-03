@@ -98,4 +98,12 @@ router.get(
   genericResponse.sendResponse
 );
 
+router.delete(
+  "/transaction/:groupId/:expenseId/:transactionId",
+  checkAccessToken,
+  groupValidator.settleTransactionValidate,
+  groupController.settleTransaction,
+  genericResponse.sendResponse
+);
+
 module.exports = router;
