@@ -91,4 +91,11 @@ router.get(
   genericResponse.sendResponse
 );
 
+router.get(
+  "/all/:id",
+  checkAccessToken,
+  groupController.overallExpenseOfCurrentUserAtGroup,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

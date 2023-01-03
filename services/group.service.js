@@ -447,6 +447,65 @@ const overallExpenseOfCurrentUserAtGroups = async (userData) => {
   };
 };
 
+const overallExpenseOfCurrentUserAtGroup = async (userData, params) => {
+  let currentUserId = userData.id;
+  let groupId = params.id;
+
+  let existingGroup = await models.Group.findOne({
+    where: {
+      id: groupId,
+    },
+  });
+  if (!existingGroup) throw new Error("Group not found!");
+
+  let borrow = await models.Transaction.findAll({
+    attributes: [
+      [Sequelize.fn("sum", Sequelize.col("amount_to_pay")), "borrow"],
+    ],
+    group: ["Transaction.id", "expense.id"],
+    where: {
+      payerId: currentUserId,
+    },
+    include: [
+      {
+        model: models.Expense,
+        as: "expense",
+        where: {
+          groupId: groupId,
+        },
+      },
+    ],
+  });
+  let lent = await models.Transaction.findAll({
+    attributes: [[Sequelize.fn("sum", Sequelize.col("amount_to_pay")), "lent"]],
+    group: ["expense.id"],
+    where: {
+      payeeId: currentUserId,
+    },
+    include: [
+      {
+        model: models.Expense,
+        as: "expense",
+        where: {
+          groupId: groupId,
+        },
+      },
+    ],
+  });
+  let borroAmount = 0,
+    lentAmount = 0;
+  for (const b of borrow) {
+    borroAmount += b.dataValues.borrow;
+  }
+  for (const l of lent) {
+    lentAmount += l.dataValues.lent;
+  }
+  let amountDifference = lentAmount - borroAmount;
+  return {
+    amountDifference,
+  };
+};
+
 module.exports = {
   createGroup,
   addMember,
@@ -458,4 +517,5 @@ module.exports = {
   leaveGroup,
   deleteGroup,
   overallExpenseOfCurrentUserAtGroups,
+  overallExpenseOfCurrentUserAtGroup,
 };
