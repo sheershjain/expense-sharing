@@ -84,4 +84,11 @@ router.delete(
   genericResponse.sendResponse
 );
 
+router.get(
+  "/all",
+  checkAccessToken,
+  groupController.overallExpenseOfCurrentUserAtGroups,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

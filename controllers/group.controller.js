@@ -112,6 +112,19 @@ const deleteGroup = async (req, res, next) => {
   }
 };
 
+const overallExpenseOfCurrentUserAtGroups = async (req, res, next) => {
+  try {
+    const data = await groupService.overallExpenseOfCurrentUserAtGroups(
+      req.user
+    );
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createGroup,
   addMember,
@@ -122,4 +135,5 @@ module.exports = {
   allGroupOfCurrentUser,
   leaveGroup,
   deleteGroup,
+  overallExpenseOfCurrentUserAtGroups,
 };
