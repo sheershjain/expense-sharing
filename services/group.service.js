@@ -284,10 +284,45 @@ const expenseDetail = async (params) => {
   return existingExpenseId;
 };
 
+const groupExpenses = async (params) => {
+  let groupId = params.id;
+  let existingGroup = await models.Group.findOne({
+    where: {
+      id: groupId,
+    },
+  });
+  if (!existingGroup) throw new Error("Group not found!");
+
+  let expenses = await models.Expense.findAll({
+    where: {
+      groupId: groupId,
+    },
+  });
+  return expenses;
+};
+
+const allGroupOfCurrentUser = async (userData) => {
+  console.log(userData);
+  let currentUserId = userData.id;
+
+  let groups = await models.GroupUserMapping.findAll({
+    where: { userId: currentUserId },
+    include: [
+      {
+        model: models.Group,
+        as: "group",
+      },
+    ],
+  });
+  return groups;
+};
+
 module.exports = {
   createGroup,
   addMember,
   addExpense,
   simplifyDebts,
   expenseDetail,
+  groupExpenses,
+  allGroupOfCurrentUser,
 };

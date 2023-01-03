@@ -105,9 +105,50 @@ const expenseDetailData = (req, res, next) => {
   next();
 };
 
+const groupExpensesData = (req, res, next) => {
+  let reciveData = res.data || {};
+  let resultData = {};
+  let expenses = [];
+
+  if (reciveData) {
+    reciveData.forEach((expense) => {
+      expenses.push({
+        id: expense.dataValues.id,
+        name: expense.dataValues.name,
+        baseAmount: expense.dataValues.baseAmount,
+        splitType: expense.dataValues.splitType,
+      });
+    });
+    resultData.expenses = expenses;
+  }
+  res.data = resultData;
+  next();
+};
+
+const allGroupOfCurrentUserData = (req, res, next) => {
+  let reciveData = res.data || {};
+  let resultData = {};
+  let groups = [];
+
+  if (reciveData) {
+    reciveData.forEach((expense) => {
+      groups.push({
+        id: expense.dataValues.group.id,
+        name: expense.dataValues.group.name,
+        category: expense.dataValues.group.category,
+      });
+    });
+    resultData.groups = groups;
+  }
+  res.data = resultData;
+  next();
+};
+
 module.exports = {
   createGroupData,
   addMemberData,
   addExpenseData,
   expenseDetailData,
+  groupExpensesData,
+  allGroupOfCurrentUserData,
 };

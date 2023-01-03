@@ -51,4 +51,21 @@ router.get(
   genericResponse.sendResponse
 );
 
+router.get(
+  "/expense/all/:id",
+  checkAccessToken,
+  groupValidator.paramsIdCheck,
+  groupController.groupExpenses,
+  groupSerializer.groupExpensesData,
+  genericResponse.sendResponse
+);
+
+router.get(
+  "/",
+  checkAccessToken,
+  groupController.allGroupOfCurrentUser,
+  groupSerializer.allGroupOfCurrentUserData,
+  genericResponse.sendResponse
+);
+
 module.exports = router;

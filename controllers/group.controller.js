@@ -65,10 +65,35 @@ const expenseDetail = async (req, res, next) => {
   }
 };
 
+const groupExpenses = async (req, res, next) => {
+  try {
+    const { params } = req;
+    const data = await groupService.groupExpenses(params);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
+const allGroupOfCurrentUser = async (req, res, next) => {
+  try {
+    const data = await groupService.allGroupOfCurrentUser(req.user);
+    res.data = data;
+    next();
+  } catch (error) {
+    console.log(error);
+    commonErrorHandler(req, res, error.message, 400, error);
+  }
+};
+
 module.exports = {
   createGroup,
   addMember,
   addExpense,
   simplifyDebts,
   expenseDetail,
+  groupExpenses,
+  allGroupOfCurrentUser,
 };
