@@ -350,12 +350,47 @@ const leaveGroup = async (userData, params) => {
   });
 
   for (const expense of pendingTransaction) {
-    if (expense.dataValues.transactions) throw new Error("Pending transactions");
+    if (expense.dataValues.transactions)
+      throw new Error("Pending transactions");
   }
 
   await models.GroupUserMapping.destroy({
     where: {
       [Op.and]: [{ groupId: groupId }, { userId: currentUserId }],
+    },
+  });
+  return;
+};
+
+const deleteGroup = async (params) => {
+  let groupId = params.id;
+  let existingGroup = await models.Group.findOne({
+    where: {
+      id: groupId,
+    },
+  });
+  if (!existingGroup) throw new Error("Group not found!");
+
+  let pendingTransaction = await models.Expense.findAll({
+    where: {
+      groupId: groupId,
+    },
+    include: [
+      {
+        model: models.Transaction,
+        as: "transactions",
+      },
+    ],
+  });
+
+  for (const expense of pendingTransaction) {
+    if (expense.dataValues.transactions)
+      throw new Error("Pending transactions");
+  }
+
+  await models.Group.destroy({
+    where: {
+      groupId: groupId,
     },
   });
   return;
@@ -370,4 +405,5 @@ module.exports = {
   groupExpenses,
   allGroupOfCurrentUser,
   leaveGroup,
+  deleteGroup,
 };

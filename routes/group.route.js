@@ -76,4 +76,12 @@ router.post(
   genericResponse.sendResponse
 );
 
+router.delete(
+  "/:id",
+  checkAccessToken,
+  groupValidator.paramsIdCheck,
+  groupController.deleteGroup,
+  genericResponse.sendResponse
+);
+
 module.exports = router;
