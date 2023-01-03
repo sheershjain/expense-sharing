@@ -33,7 +33,6 @@ module.exports = {
           key: "id",
         },
       },
-
       amount_to_pay: {
         type: Sequelize.FLOAT,
         allowNull: true,

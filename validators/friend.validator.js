@@ -17,7 +17,6 @@ const addExpenseSchema = async (req, res, next) => {
     payerId: Joi.string().guid().required(),
     splitType: Joi.string().valid("equally", "unequally", "exactly").required(),
     payerAmount: Joi.number(),
-    groupId: Joi.string(),
   });
   validateRequest(req, res, next, schema, "body");
 };
