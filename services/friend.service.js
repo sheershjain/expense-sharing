@@ -301,9 +301,7 @@ const expenseDetail = async (params) => {
 };
 
 const updateExpense = async (payload, params) => {
-  console.log("after query");
   let expenseId = params.id;
-  console.log("after query");
   let existingExpenseId = await models.Expense.findOne({
     where: { id: expenseId },
     include: [
@@ -314,7 +312,6 @@ const updateExpense = async (payload, params) => {
     ],
   });
   if (!existingExpenseId) throw new Error("Expense Id not found");
-  console.log("after query");
   let name = payload.name || existingExpenseId.dataValues.name;
   let baseAmount =
     payload.baseAmount || existingExpenseId.dataValues.baseAmount;

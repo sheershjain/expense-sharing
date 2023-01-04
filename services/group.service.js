@@ -221,7 +221,6 @@ const addExpense = async (payload) => {
       }
     }
     await t.commit();
-    console.log(expense, transactions);
     return {
       expense,
       transactions,
@@ -302,7 +301,6 @@ const groupExpenses = async (params) => {
 };
 
 const allGroupOfCurrentUser = async (userData) => {
-  console.log(userData);
   let currentUserId = userData.id;
 
   let groups = await models.GroupUserMapping.findAll({
