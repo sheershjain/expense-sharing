@@ -4,7 +4,6 @@ class BinaryHeap {
   }
 
   insert(value) {
-    // console.log(value);
     this.heap.push(value);
     this.bubbleUp();
   }

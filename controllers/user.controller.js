@@ -8,6 +8,8 @@ const userSignup = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -19,6 +21,8 @@ const userLogin = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -44,6 +48,8 @@ const forgetPassword = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -55,6 +61,8 @@ const resetPassword = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -66,6 +74,8 @@ const updateUser = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -76,6 +86,8 @@ const deleteUser = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -86,6 +98,8 @@ const userLogout = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };

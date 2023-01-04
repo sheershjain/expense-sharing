@@ -60,7 +60,8 @@ const expenseDetail = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -72,7 +73,8 @@ const groupExpenses = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -83,7 +85,8 @@ const allGroupOfCurrentUser = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -95,7 +98,8 @@ const leaveGroup = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -107,7 +111,8 @@ const deleteGroup = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -120,7 +125,8 @@ const overallExpenseOfCurrentUserAtGroups = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -135,7 +141,8 @@ const overallExpenseOfCurrentUserAtGroup = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -147,6 +154,8 @@ const settleTransaction = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };

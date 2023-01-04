@@ -94,6 +94,7 @@ router.get(
 router.get(
   "/all/:id",
   checkAccessToken,
+  groupValidator.paramsIdCheck,
   groupController.overallExpenseOfCurrentUserAtGroup,
   genericResponse.sendResponse
 );

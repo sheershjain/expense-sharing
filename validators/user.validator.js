@@ -38,11 +38,18 @@ const forgetPassword = async (req, res, next) => {
   validateRequest(req, res, next, schema, "body");
 };
 
-const resetPasswordSchema = async (req, res, next) => {
+const resetPasswordParamsSchema = async (req, res, next) => {
   const schema = Joi.object({
     token: Joi.string().alphanum().min(5).required(),
   });
   validateRequest(req, res, next, schema, "params");
+};
+
+const resetPasswordBodySchema = async (req, res, next) => {
+  const schema = Joi.object({
+    password: passwordComplexity(complexityOptions).required(),
+  });
+  validateRequest(req, res, next, schema, "body");
 };
 
 const userUpdateSchema = async (req, res, next) => {
@@ -58,6 +65,7 @@ module.exports = {
   signupSchema,
   loginSchema,
   forgetPassword,
-  resetPasswordSchema,
+  resetPasswordParamsSchema,
+  resetPasswordBodySchema,
   userUpdateSchema,
 };

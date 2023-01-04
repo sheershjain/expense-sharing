@@ -8,7 +8,8 @@ const addFriend = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -20,7 +21,8 @@ const addExpense = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -32,7 +34,8 @@ const simplifyDebts = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -43,7 +46,8 @@ const overallExpenseOfCurrentUser = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -58,7 +62,8 @@ const AllTransactionWithTargetUser = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -70,7 +75,8 @@ const removeFriend = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -81,7 +87,8 @@ const getAllFriend = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -93,7 +100,8 @@ const expenseDetail = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -106,7 +114,8 @@ const updateExpense = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
-    // console.log(error);
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
@@ -118,6 +127,8 @@ const settleTransaction = async (req, res, next) => {
     res.data = data;
     next();
   } catch (error) {
+    console.log("-----", error);
+    console.log("getModalFieldData error:", error);
     commonErrorHandler(req, res, error.message, 400, error);
   }
 };
