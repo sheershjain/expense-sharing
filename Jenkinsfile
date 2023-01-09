@@ -18,7 +18,10 @@ pipeline {
                 slackSend message: "Build Started ${tag}"
                 sh '''
 				docker build -t sheersh/divyanshi:${tag} .
-                docker rmi $(docker images -f "dangling=true" -q)
+                if [ $(docker images -f "dangling=true" -q) != "" ];
+                    then
+                        docker rmi $(docker images -f "dangling=true" -q)
+                fi
 				'''
                 slackSend message: "Build Completed, Image name -> sheersh/divyanshi:${tag}"
 				mail bcc: '', body: "Build is completed. Image name -> sheersh/divyanshi:${tag}", cc: 'harshit@gkmit.co', from: '', replyTo: '', subject: 'Build successful', to: 'divyanshi@gkmit.co'
