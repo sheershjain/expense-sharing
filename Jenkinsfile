@@ -9,7 +9,7 @@ pipeline {
         stage('SCM') {
             steps {
                 echo "PULL CODE FROM GITHUB"
-                sh "rm -rf ./*"
+                cleanWs()
                 git branch: 'feature/sheersh', url: 'https://github.com/sheershjain/expense-sharing.git'
             }
         }
