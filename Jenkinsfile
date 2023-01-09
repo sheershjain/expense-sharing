@@ -43,8 +43,23 @@ pipeline {
         stage('Deploy webapp in DEV environment') {
             steps {
                 sh "docker pull sheersh/divyanshi:${tag}"
+
+
+                sh '''
+                if [ $(docker images divyanshi:latest) != "" ];
+                    then
+                        docker rmi -f divyanshi:latest
+                fi
+                '''
                 sh "docker tag sheersh/divyanshi:${tag} divyanshi:latest"
-                sh "docker-compose -f /home/ec2-user/docker-compose.yml restart app"
+                sh '''
+                if [ $(docker ps -q) != "" ];
+                    then
+                        docker-compose -f /home/ec2-user/docker-compose.yml restart app
+                else
+                    docker-compose -f /home/ec2-user/docker-compose.yml up -d
+                fi
+                '''
                 
                 slackSend message: "Backend deployed in Dev Environment Successfully at http://13.233.21.134/ with image sheersh/divyanshi:${tag} "
                 mail bcc: '', body: "Backend deployed in Dev Environment Successfully at http://13.233.21.134/ with image sheersh/divyanshi:${tag}", cc: 'harshit@gkmit.co', from: '', replyTo: '', subject: 'Deploy in DEV', to: 'divyanshi@gkmit.co'
