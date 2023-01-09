@@ -58,7 +58,7 @@ pipeline {
 			slackSend message: "Pipeline run successfull"
 		}
 		failure{
-			sendMessage message:"Kuch tho fta hai"
+			sendMessage message:"Kuch tho fata hai"
 		}
 	}
 }
